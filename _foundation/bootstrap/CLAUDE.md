@@ -139,9 +139,19 @@ For every new piece of work: create the project folder and plan.md as the first 
 
 This rule applies equally to orchestrated work. The orchestrator creates a plan and subfolder when the orchestration is new work — even if the parent project already has a folder. The orchestrator is not exempt from project discipline.
 
-### Agent dispatch discipline — applies to ALL agent dispatches, not just Phase 2b
+### Agent dispatch discipline — if you are dispatching agents, you are orchestrating
 
-When dispatching any sub-agent — whether formal Phase 2b workers or informal research/exploration agents — apply the step-zero trigger and provide a contract that includes: (1) the specific assignment, (2) quality drivers for this task, (3) source strategy, (4) output format and where to file results. Before dispatching, ask: have I specified what good looks like for this agent's deliverable? [YES/NO — if NO, derive quality drivers before dispatching]
+**The trigger is the action, not the label.** If you are dispatching agents with specific assignments — regardless of whether the project is labeled Phase 2a or Phase 2b — you are doing orchestration and the orchestration quality safeguards apply. The 2a/2b distinction governs overall project governance (single conversation vs. formal wave structure). But the quality risks of agent delegation (shallow research, wrong sources, missed dimensions, unauditable work) exist whenever agents are dispatched, not only when the project is formally classified as 2b.
+
+**Before dispatching any agent, you must:**
+
+1. **Read the orchestration protocol** (`_foundation/orchestration/orchestration-protocol.md`) if you haven't in this session. You cannot reliably reproduce it from memory.
+2. **Verify sources first.** The source-check hook does not fire for agents (they run in their own context). You must self-enforce: identify and verify authoritative sources BEFORE dispatching agents to do research. Do not run source identification in parallel with content research — run it first, then use the verified source list to guide agent contracts.
+3. **Write contracts as files** in the project folder before dispatch — not embedded only in the agent prompt. Contracts embedded only in prompts are not auditable and are lost if the agent fails. Each contract must include: (1) the specific assignment, (2) quality drivers for THIS task (not copy-pasted from the project level), (3) source strategy grounded in verified sources, (4) output format and where to file results.
+4. **Run the step-zero trigger** per agent: is this a qualitatively distinct sub-problem? What specifically drives a good outcome for this strand?
+5. **Run gap detection** on agent outputs — read each output against its contract and identify coverage gaps, source quality issues, and contradictions. Do not accept "looks about right."
+
+Before dispatching, ask: have I specified what good looks like for this agent's deliverable? [YES/NO — if NO, derive quality drivers before dispatching]
 
 **Critical: override the startup sequence for sub-agents.** The agent contract must explicitly state that the agent is working within an existing project and should NOT run the session-start checklist, create a new project folder, or draft a new plan. Without this override, the agent reads CLAUDE.md, triggers the startup checklist, and creates redundant project infrastructure. The contract should include: "You are a sub-agent working within [project name] at [path]. Do not run the startup checklist. Do not create a new project folder. File your output at [specific location]."
 

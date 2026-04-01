@@ -206,6 +206,8 @@ Determine whether this work is single-strand or multi-agent:
 
 Phase 2b must be justified — state why the work benefits from formal decomposition, not just that it has multiple parts.
 
+**Critical: the 2a/2b distinction does not gate agent dispatch discipline.** If you are in a Phase 2a project but find yourself dispatching agents with specific research assignments — you are orchestrating, and the orchestration quality safeguards apply. The common failure mode is: model labels the project "2a," then dispatches multiple agents in parallel without contracts as files, without source verification before dispatch, and without gap detection on outputs — rationalizing this as "informal 2a agent use." This is the exact quality risk the orchestration discipline exists to prevent. See the Agent dispatch discipline rule in CLAUDE.md — the trigger is dispatching agents, not the engagement pattern label.
+
 **If Phase 2b is selected,** the plan must also include: delegation approval status, worker topology and interfaces, worker deliverables and approval path, wave structure and checkpoint criteria, and process transparency / re-dispatch rules. These are detailed in the orchestration protocol.
 
 **Platform requirements for Phase 2b:**
