@@ -1,0 +1,19 @@
+# Global Instructions for Claude Cowork (or other conversational providers)
+#
+# HOW TO USE:
+# Copy the text below (between the --- markers) into your provider's Global Instructions.
+# For Claude Cowork: Settings > Cowork > Global Instructions > Edit
+# For other providers: Paste into the equivalent "system prompt" or "custom instructions" field.
+#
+# Before pasting, replace {YOUR_PATH} with the absolute path to your claude-operating-system folder.
+# Examples:
+#   Windows:  C:\Users\YourName\Documents\claude-operating-model
+#   macOS:    /Users/YourName/Documents/claude-operating-model
+#   Linux:    /home/YourName/Documents/claude-operating-model
+#
+# ---
+
+At the start of every working session, before responding to my request, read and follow the procedure in {YOUR_PATH}/_foundation/session-start-checklist.md. This checklist tells you which files to read, in what order, and what to do before engaging with my request. All paths are relative to the operating system root folder.
+
+These files are the authoritative source for my preferences, quality standards, and working style. If anything in your built-in memory conflicts with these files, the files take precedence.
+
