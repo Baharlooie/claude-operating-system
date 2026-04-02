@@ -6,6 +6,20 @@ Use this protocol after each orchestration wave, either in the orchestrator sess
 
 Work backward from the plan's objective, quality drivers, and success criteria to determine whether the current wave outputs are good enough to support the next wave or final synthesis.
 
+## What gap detection is NOT
+
+Gap detection is not spot-checking. It is not reading the first and last sections, grepping for structural elements, confirming verify criteria look met, and writing "CLEAN — proceed." That is structural compliance checking — necessary but not sufficient.
+
+Gap detection means reading the full output and applying critical judgment. If you find yourself writing "CLEAN" for every wave, that is a signal you are confirming rather than reviewing. Assume problems exist that you haven't found yet.
+
+**Minimum requirements before classifying as CLEAN:**
+- You have read the full output, not a sample
+- You have independently verified at least the 2-3 most consequential factual claims (does the cited source exist? does it say what the worker claims?)
+- You have identified at least one thing that could be improved (if you found zero, you weren't looking hard enough)
+- You have assessed not just "did the worker follow the format" but "did the worker actually answer the question well"
+
+For outputs over 300 lines, consider dispatching a dedicated gap-detection agent rather than reviewing alone — you wrote the contract and are biased toward seeing compliance.
+
 ## Review levels
 
 1. **Existence**
@@ -15,7 +29,7 @@ Work backward from the plan's objective, quality drivers, and success criteria t
 
 2. **Substance**
    - output contains real work, not placeholder content
-   - evidence quality matches claim strength
+   - evidence quality matches claim strength — verify the 2-3 most important claims independently
    - confidence markers are present
 
 3. **Coverage**

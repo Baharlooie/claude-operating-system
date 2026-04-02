@@ -38,12 +38,13 @@ process.stdin.on('end', () => {
 
     if (hasContracts) {
       const context = `AGENT COMPLETED — orchestrator responsibilities before proceeding:
-1. READ the agent's output in full against its contract — did it deliver what was specified?
-2. ASSESS quality — are sources authoritative, is reasoning sound, are there gaps or contradictions?
-3. RUN gap detection — systematic check, not "looks about right"
-4. SYNTHESIZE — what does this output mean for the project? What's the so-what for the user?
-5. PROPOSE next steps — what follows from this output in light of the project plan?
-Do not simply pass agent output to the user. Your role is quality control, synthesis, and judgment.`;
+1. READ the full output end-to-end against its contract. Not a sample. Not just the opening and verify criteria. The full document.
+2. VERIFY the 2-3 most important factual claims independently — does the cited source exist and say what the worker claims?
+3. ACTIVELY LOOK FOR PROBLEMS — assume they exist. If you find zero issues, you are confirming, not reviewing.
+4. RUN gap detection per the protocol — all 6 levels (existence, substance, coverage, cross-reference, quality judgment, process transparency).
+5. SYNTHESIZE — what does this output mean for the project? What is the so-what for the user in light of the project objective?
+6. PROPOSE next steps — what follows from this, what should come next, what decisions does the user need to make?
+Sampling is not QA. Structural compliance checking is not gap detection. Your role is quality control, synthesis, and judgment — not pass-through.`;
 
       const output = {
         hookSpecificOutput: {
