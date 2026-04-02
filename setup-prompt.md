@@ -125,6 +125,54 @@ Configure the hooks in `~/.claude/settings.json`. Read the existing file first, 
 ```json
 {
   "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"[their path]/_foundation/hooks/checklist-enforcer.js\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"[their path]/_foundation/hooks/quality-gate-reminder.js\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"[their path]/_foundation/hooks/subagent-orchestrator-reminder.js\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"[their path]/_foundation/hooks/pre-compaction-saver.js\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Write|Edit|Bash",
@@ -195,7 +243,7 @@ Configure the hooks in `~/.claude/settings.json`. Read the existing file first, 
 
 Replace `[their path]` with the user's actual path. Merge this with any existing settings (preserve existing keys like `effortLevel`). Write the updated settings.json.
 
-Tell the user: "I've installed 6 hooks that automatically enforce key behaviors: plan-before-execution gate (blocks execution without a confirmed plan), source quality reminders before searches, agent contract checks before dispatches, periodic checkpoint reminders, gap detection reminders during orchestration, and QA assessment checks on deliverables. These only work in Claude Code — they don't affect Cowork."
+Tell the user: "I've installed 10 hooks that automatically enforce key behaviors: startup checklist enforcement, quality gate reminders before every response, plan-before-execution gate (blocks execution without a confirmed plan), source quality reminders before searches, agent contract and orchestration quality checks, periodic checkpoint reminders, context preservation before compaction, and QA assessment checks on deliverables. These only work in Claude Code — they don't affect Cowork."
 
 ---
 

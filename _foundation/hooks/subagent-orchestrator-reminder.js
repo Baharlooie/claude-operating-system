@@ -1,3 +1,5 @@
+// SubagentStop hook: remind orchestrator of full responsibilities when an agent completes
+// Only fires when formal orchestration is happening (contracts exist)
 const fs = require('fs');
 const path = require('path');
 let input = '';
@@ -7,8 +9,7 @@ process.stdin.on('end', () => {
     const data = JSON.parse(input);
     const cwd = data.cwd || process.cwd();
 
-    // Search for orchestration/contracts/ folders with .md files
-    // Check both cwd-relative and recursively under projects/
+    // Check if formal orchestration is happening (contracts exist anywhere in project tree)
     const findContracts = (dir, depth) => {
       if (depth <= 0) return false;
       try {
@@ -16,12 +17,10 @@ process.stdin.on('end', () => {
         for (const e of entries) {
           if (e.isDirectory()) {
             if (e.name === 'contracts') {
-              // Check if parent is 'orchestration'
               const parentName = path.basename(dir);
               if (parentName === 'orchestration') {
-                const contractPath = path.join(dir, e.name);
                 try {
-                  const files = fs.readdirSync(contractPath).filter(f => f.endsWith('.md'));
+                  const files = fs.readdirSync(path.join(dir, e.name)).filter(f => f.endsWith('.md'));
                   if (files.length > 0) return true;
                 } catch (err) {}
               }
@@ -37,11 +36,19 @@ process.stdin.on('end', () => {
 
     const hasContracts = findContracts(cwd, 6);
 
-    if (!hasContracts) {
+    if (hasContracts) {
+      const context = `AGENT COMPLETED — orchestrator responsibilities before proceeding:
+1. READ the agent's output in full against its contract — did it deliver what was specified?
+2. ASSESS quality — are sources authoritative, is reasoning sound, are there gaps or contradictions?
+3. RUN gap detection — systematic check, not "looks about right"
+4. SYNTHESIZE — what does this output mean for the project? What's the so-what for the user?
+5. PROPOSE next steps — what follows from this output in light of the project plan?
+Do not simply pass agent output to the user. Your role is quality control, synthesis, and judgment.`;
+
       const output = {
         hookSpecificOutput: {
-          hookEventName: "PreToolUse",
-          additionalContext: "AGENT DISPATCH WARNING: No contract files found in any orchestration/contracts/ folder. If you are dispatching agents, you are orchestrating — the orchestration quality safeguards apply regardless of whether this is labeled 2a or 2b. Before dispatching: (1) Have you verified authoritative sources BEFORE this dispatch? Source verification must happen first, not in parallel. (2) Write contracts to files — each must include: assignment, quality drivers for THIS task, source strategy grounded in verified sources, output format and location. (3) Tell the agent not to run the startup checklist."
+          hookEventName: 'SubagentStop',
+          additionalContext: context
         }
       };
       process.stdout.write(JSON.stringify(output));

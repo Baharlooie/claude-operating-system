@@ -52,7 +52,7 @@ Out of the box, Claude is optimized for helpfulness and fluency — which works 
 
 **Multi-agent orchestration.** For complex work with separable parallel tracks, Claude Code can decompose the work into parallel worker agents, each with a formal contract, quality checks, and gap detection. An orchestrator manages the execution and synthesizes results. This isn't available out of the box.
 
-**Automatic enforcement via hooks (Claude Code).** 6 hooks run during Claude Code sessions — mechanically enforcing behaviors that text-based rules can't guarantee. Including: blocking execution until a plan is confirmed, reminding to assess source authority before any web search, agent contract checks before dispatches, periodic checkpoint reminders, and QA checks on deliverables. These work alongside the behavioral rules, not instead of them.
+**Automatic enforcement via hooks (Claude Code).** 10 hooks run during Claude Code sessions — mechanically enforcing behaviors that text-based rules can't guarantee. Including: enforcing the startup checklist, nudging the quality gate before every response, blocking execution until a plan is confirmed, reminding to assess source authority before searches, agent contract and orchestration quality checks, periodic checkpoint reminders, preserving critical context before compaction, and QA checks on deliverables. These work alongside the behavioral rules, not instead of them.
 
 ## The system comes with tradeoffs
 

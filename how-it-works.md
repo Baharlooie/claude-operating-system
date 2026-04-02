@@ -66,18 +66,22 @@ This makes the model's quality assessment transparent and verifiable. The user c
 
 ### Hooks — automatic enforcement (Claude Code only)
 
-The operating system includes 6 hooks that run automatically during Claude Code sessions. Hooks complement the text-based behavioral rules by adding mechanical enforcement that doesn't depend on the model remembering instructions.
+The operating system includes 10 hooks that run automatically during Claude Code sessions. Hooks complement the text-based behavioral rules by adding mechanical enforcement that doesn't depend on the model remembering instructions.
 
 | Hook | Fires when | What it does |
 |---|---|---|
-| **Plan gate** | Before Write/Edit/Bash | **Blocks execution** if no `.plan-confirmed` marker exists — enforces plan-before-execution. Allows system maintenance (operations on `_foundation/`, `.claude/`, `_context/`). |
+| **Checklist enforcer** | Session start/compact | Reminds to read the session-start checklist. After compaction, reminds to run the 5-item checkpoint. |
+| **Quality gate reminder** | Every user prompt (>30 chars) | Nudges the step-zero trigger and quality gate before each substantive response |
+| **Plan gate** | Before Write/Edit/Bash | **Blocks execution** if no `.plan-confirmed` marker exists — enforces plan-before-execution |
 | **Source quality reminder** | Before WebSearch/WebFetch | Reminds to assess source authority before searching |
-| **Agent contract check** | Before Agent dispatch | Warns if no contract files exist in orchestration folder |
-| **Checkpoint reminder** | After every 25 tool calls | Reminds to check plan alignment and consider compaction |
-| **Gap detection reminder** | After Agent completes (formal orchestration only) | Reminds orchestrator to run gap detection — only fires when `orchestration/contracts/` exists |
+| **Agent contract check** | Before Agent dispatch | Warns if no contracts exist; reminds about source verification before dispatch |
+| **Checkpoint reminder** | After every 25 tool calls | Reminds to check plan alignment, quality gate, and consider compaction |
+| **Gap detection reminder** | After Agent completes (formal orchestration) | Reminds orchestrator to run gap detection — only fires when contracts exist |
+| **Orchestrator reminder** | When a subagent completes (formal orchestration) | Reminds orchestrator of full responsibilities: assess output against contract, QA, synthesize, propose next steps |
 | **QA appendix check** | After Write | Warns if a deliverable file is missing the QA Assessment appendix |
+| **Pre-compaction saver** | Before context compaction | Injects critical context (plan path, active project) to survive compaction |
 
-**Key distinction:** The plan gate is true enforcement — it blocks the tool call entirely until the plan is confirmed. The other hooks are reminders that output context at the exact trigger point — more reliable than text-based rules the model may have stopped attending to.
+**Key distinction:** The plan gate is true enforcement — it blocks the tool call entirely until the plan is confirmed. The other hooks are reminders that inject context at the exact trigger point — more reliable than text-based rules the model may have stopped attending to.
 
 **Cowork users:** Hooks are Claude Code only. The operating system works fully without them in Cowork — the CLAUDE.md behavioral rules and session-start checklist function identically. Hooks add an enforcement layer for Code users.
 
@@ -125,12 +129,16 @@ claude-operating-system/
 │   ├── qa-checklist.md            ← QA assessment checklist for deliverables
 │   ├── handoff-note.md            ← cross-session continuity template
 │   ├── hooks/                     ← automatic enforcement scripts (Code only)
+│   │   ├── checklist-enforcer.js
+│   │   ├── quality-gate-reminder.js
 │   │   ├── plan-gate.js
 │   │   ├── source-check-reminder.js
 │   │   ├── agent-contract-check.js
 │   │   ├── checkpoint-reminder.js
 │   │   ├── gap-detection-reminder.js
-│   │   └── qa-appendix-check.js
+│   │   ├── subagent-orchestrator-reminder.js
+│   │   ├── qa-appendix-check.js
+│   │   └── pre-compaction-saver.js
 │   ├── orchestration/             ← multi-agent protocol + reference files
 │   └── bootstrap/
 │       └── CLAUDE.md              ← behavioral rules (configured during setup)
