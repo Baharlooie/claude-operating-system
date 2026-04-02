@@ -60,6 +60,15 @@ For outputs over 300 lines, consider dispatching a dedicated gap-detection agent
 - **MAJOR GAP**: remediate or re-dispatch before proceeding
 - **ESCALATE**: premise contradiction, scope problem, or judgment issue requiring human input
 
+## After gap detection: the orchestrator's synthesis role
+
+Gap detection is one step in the orchestrator's role — not the whole role. After assessing quality, the orchestrator must synthesize:
+
+1. **Per-output so-what:** What does this output mean for the project objective? Even if the worker included implications, the orchestrator must validate them against the broader plan.
+2. **Cross-cutting so-what:** What are the implications ACROSS tracks, streams, and topics? Individual workers see only their scope. The orchestrator sees connections, contradictions, and compounding insights across all outputs. This holistic cross-cutting view is a key part of orchestration that no worker can provide.
+3. **Implications for other work:** Does this output change the approach for other topics, invalidate assumptions in other contracts, or reveal opportunities not previously visible?
+4. **Next steps:** What should come next, and what decisions does the user need to make?
+
 ## Required output
 
 Write a gap report that includes:
@@ -70,4 +79,5 @@ Write a gap report that includes:
 - minor gaps to carry into synthesis
 - quality-judgment concerns
 - process-transparency concerns
+- **cross-cutting implications** — connections, contradictions, or compounding insights across workers/topics
 - recommended next action: proceed, remediate, adjust scope, or escalate

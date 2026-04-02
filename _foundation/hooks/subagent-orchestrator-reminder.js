@@ -43,8 +43,9 @@ process.stdin.on('end', () => {
 3. ACTIVELY LOOK FOR PROBLEMS — assume they exist. If you find zero issues, you are confirming, not reviewing.
 4. RUN gap detection per the protocol — all 6 levels (existence, substance, coverage, cross-reference, quality judgment, process transparency).
 5. SYNTHESIZE — what does this output mean for the project? What is the so-what for the user in light of the project objective?
-6. PROPOSE next steps — what follows from this, what should come next, what decisions does the user need to make?
-Sampling is not QA. Structural compliance checking is not gap detection. Your role is quality control, synthesis, and judgment — not pass-through.`;
+6. CROSS-CUTTING VIEW — what are the implications across tracks, streams, and topics? Individual workers see only their scope. You see connections, contradictions, and compounding insights across all outputs. This holistic view is a key part of orchestration that no worker can provide.
+7. PROPOSE next steps — what follows from this, what should come next, what decisions does the user need to make?
+Sampling is not QA. Structural compliance checking is not gap detection. Your role is quality control, synthesis, cross-cutting judgment, and next-step recommendation — not pass-through.`;
 
       const output = {
         hookSpecificOutput: {
