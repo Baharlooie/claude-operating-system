@@ -41,6 +41,13 @@ Use this as the canonical brief structure for delegated workers in Phase 2b mult
 - Auto-flag: {what the worker should note but continue through}
 - STOP and return PARTIAL: {what should halt completion}
 
+## Claim strength discipline
+Do NOT overstate confidence. This is a systematic issue in agent outputs:
+- "Verified" means you checked the source and confirmed the claim. Pre-trained knowledge is NOT verified — label it "based on training data" or "unverified."
+- Do not upgrade hedged language to absolute claims. "One of the strongest predictors" is not "the single strongest predictor." "Evidence suggests" is not "research proves."
+- If you cannot access the original source, say so. Do not cite a paper you found in a search snippet as if you read it.
+- When in doubt, understate rather than overstate. The orchestrator will flag weak claims — but cannot easily detect overstated ones.
+
 ## Process transparency requirements
 The worker must disclose:
 - methodology used

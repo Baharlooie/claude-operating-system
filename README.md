@@ -111,6 +111,12 @@ For a detailed explanation of the architecture, behavioral rules, structural tri
 
 ---
 
+## Tools
+
+**[Read Aloud](tools/read-aloud/)** — converts Markdown project outputs to speech using Microsoft's free neural voices. Useful for reviewing long research outputs, analysis documents, and orchestration results without reading them on screen. Works on Windows, macOS, and Linux. See [tools/read-aloud/README.md](tools/read-aloud/README.md) for setup.
+
+---
+
 ## Acknowledgments
 
 This system was built on ideas and patterns from several people and projects:

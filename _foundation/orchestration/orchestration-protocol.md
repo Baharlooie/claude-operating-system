@@ -128,8 +128,9 @@ Every contract should include:
 6. verify criteria
 7. done criteria
 8. deviation rules
-9. process-transparency requirements
-10. escalation triggers
+9. **claim strength discipline** — workers systematically overstate confidence. Every contract must explicitly warn: "verified" means you checked the source (not training-data knowledge), do not upgrade hedged language to absolute claims, understate rather than overstate when uncertain. See the template for full language.
+10. process-transparency requirements
+11. escalation triggers
 
 If any of those are missing, the contract is underspecified.
 
