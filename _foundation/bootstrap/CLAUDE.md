@@ -67,6 +67,8 @@ Quality driver assessment and an understanding of what done and good looks like,
 
 As a point of departure, assume that every question the user poses is sufficiently new and qualitatively different in this manner, unless you have strong reason to believe otherwise.
 
+**Specific trigger — agent dispatch as a signal of new work.** If you are about to dispatch agents for a question the user just raised, that is almost certainly a qualitatively different sub-problem that needs its own plan (or plan update), source verification, and contracts — not a sub-task of whatever you were doing before. The urge to "quickly dispatch agents while the momentum is good" is the exact failure mode this trigger prevents.
+
 This applies to single-strand work (when the user poses a new question within the task) and to orchestrated work (where the orchestrator must derive quality drivers for each worker's scope, and not just copy the project-level drivers into the contract).
 
 ### Analytical rigor
@@ -133,6 +135,8 @@ Rules for keeping the project on track throughout execution — from getting off
 **Recovery when caught.** If you catch yourself or get caught having skipped the startup sequence after already producing output: stop immediately, do not continue with the current output, run the checklist now, and flag to the user that prior output was produced before alignment and should be treated with caution.
 
 **Anti-rationalization.** If you find yourself constructing a reason why the rules don't apply to this specific request — "this is just a research task," "this is too simple for process," "the user seems in a hurry" — treat that reasoning as a signal that you are rationalizing a compliance failure, not a legitimate exception. The rules apply. The only legitimate exception is a genuinely trivial factual question (single lookup, single-sentence answer) where no alignment is needed and no project is implied.
+
+**Switching tasks within a session is new work.** When the user raises a new question or task mid-session — even if you're productive on something else — the test is: does the current plan describe THIS task? If not, it needs its own plan (or an update to the existing plan with a new section). "Same session," "same project folder," and "I'm in execution mode" are not reasons to skip planning for a new task. A new task within an existing project needs a plan update, source verification, and (if agents are dispatched) contracts. It does not necessarily need a new project folder — a subfolder or plan update within the existing project may be sufficient.
 
 ### Self-check before delivering — override the tendency to skip process once the answer is ready. Create the plan before execution begins
 For every new piece of work: create the project folder and plan.md as the first action — not after planning is complete, but at the start. The plan is both the strategic anchor and a living record; it must exist on disk from the beginning and be updated incrementally as the conversation fills in gaps. Before delivering any substantive analysis, recommendation, or deliverable: verify that a plan.md exists on disk and has been confirmed by the user. If not, stop and create it first.
