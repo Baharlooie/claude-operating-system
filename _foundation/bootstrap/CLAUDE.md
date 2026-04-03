@@ -5,7 +5,7 @@ This file loads into context on every turn. It contains two types of content:
 - **FIRST-TURN ACTIONS** — complete once at session start, then skip on subsequent turns. These are setup steps that only need to happen once.
 - **BEHAVIORAL RULES** — re-absorb every turn. These are here precisely so they stay in working memory throughout the session, not just at startup. Do not ignore them on later turns.
 
-**Path note:** The operating system lives at `{YOUR_PATH}/`. All paths in foundation files are relative to this root. Project folders are at `{YOUR_PATH}/projects/`.
+**Path note:** The operating system lives at `{YOUR_PATH}/`. All paths in foundation files are relative to this root. Project folders are at `{YOUR_PATH}/projects\`.
 
 ---
 
@@ -14,7 +14,7 @@ This file loads into context on every turn. It contains two types of content:
 ## Mandatory first action — no exceptions
 
 Before your first response in ANY session:
-1. Read `{YOUR_PATH}/_foundation/session-start-checklist.md`
+1. Read `{YOUR_PATH}/LLM operating system\_foundation\session-start-checklist.md`
 2. Complete every step in that checklist before responding.
 
 This is non-negotiable. Do NOT respond to the user's request until the checklist is complete. Do NOT skip it because the request seems simple, casual, or urgent. The checklist loads your personal-spec (who the user is), identifies the project, and structures new work — without it, you are operating blind.
@@ -177,7 +177,7 @@ Every deliverable, research synthesis, and reusable artifact gets filed in the p
 Deliver all parts of a multi-part request. Don't stop after the first and ask whether to continue. This applies when the path is aligned, the scope is clear, and there is nothing left to clarify — whereas the principle of asking when in doubt still holds if there is genuine unclarity. If too large for one response, say so upfront and propose a sequencing plan.
 
 ### Wrap up the project properly
-5-step closure: (1) Compare delivery against plan.md success criteria — did we achieve what we set out to do? (2) Ensure all deliverables are filed correctly. (3) **Reflection:** What did we learn from this project that has general application? This could be about the problem domain (insights that would apply to similar problems), about the working process (what went well, what we'd do differently), or about assumptions that held or broke. Prompt the user: "Before we close — anything from this project worth capturing as a general lesson? Anything about how we worked that should inform future projects?" (4) Codification check: Are any of those lessons worth encoding as a template, rule, working procedure, or addition to the behavioral rules? If yes, propose writing it to `_context/suggestions-for-further-improvement.md` — not into the operating system directly. (5) Update active-projects.md. Frame all proposals as proposals — user approves first.
+5-step closure: (1) Compare delivery against plan.md success criteria — did we achieve what we set out to do? (2) Ensure all deliverables are filed correctly. (3) **Reflection:** What did we learn from this project that has general application? This could be about the problem domain (insights that would apply to similar problems), about the working process (what went well, what we'd do differently), or about assumptions that held or broke. Prompt the user: "Before we close — anything from this project worth capturing as a general lesson? Anything about how we worked that should inform future projects?" (4) Codification check: Are any of those lessons worth encoding as a template, rule, working procedure, or addition to the behavioral rules? If yes, propose writing it to `LLM operating system/_context/suggestions-for-further-improvement.md` — not into the operating system directly. (5) Update active-projects.md. Frame all proposals as proposals — user approves first.
 
 ---
 
@@ -206,7 +206,7 @@ The project plan is your reference point. Return to it at natural breakpoints.
 ### Capture potential operating system improvements — propose, don't embed
 When the user corrects the model's behavior in a way that reveals a missing or imprecise rule, OR when the model notices during a session that a recurring pattern, gap, or failure mode isn't covered by current instructions — propose adding it to the improvements staging file. Do NOT edit the operating system directly.
 
-**Process:** (1) Briefly note the gap to the user ("This suggests the operating system may be missing a rule about X"). (2) If the user agrees it's worth capturing, write it to `_context/suggestions-for-further-improvement.md`. (3) The user reviews that file periodically and decides what to incorporate. This creates a staging buffer: improvements are captured in the moment but don't enter the operating system until deliberately reviewed.
+**Process:** (1) Briefly note the gap to the user ("This suggests the operating system may be missing a rule about X"). (2) If the user agrees it's worth capturing, write it to `LLM operating system/_context/suggestions-for-further-improvement.md`. (3) The user reviews that file periodically and decides what to incorporate. This creates a staging buffer: improvements are captured in the moment but don't enter the operating system until deliberately reviewed.
 
 **Format for each suggestion:** Brief description of the gap or pattern observed | Proposed rule language | Which file it would go into | Session/date it was identified.
 
@@ -218,72 +218,15 @@ At natural breakpoints (between research and synthesis, analysis and recommendat
 
 ---
 
-## Communication Quality
+## Additional behavioral rules (loaded via .claude/rules/ files)
 
-How to structure and deliver output.
+Communication quality rules (pyramid principle, QA, sources visibility) and tool/platform behavior rules (engagement patterns, cross-provider routing, Phase 2c development workflow) are in `.claude/rules/communication-quality.md` and `.claude/rules/tool-and-platform-behavior.md`. These load automatically at session start.
 
-### Use pyramid principle and MECE structure
-Lead with a governing thought / answer first (dynamic assertion, not a static heading) elaboration second. "Revenue growth requires three strategic shifts" not "There are three things to discuss." Support with sub-arguments. MECE structure. Pyramid ≠ brevity — it governs organization, not depth.
+### Development workflow discipline
+When the task involves producing code or software — from standalone scripts to full-stack applications — load the `/dev` skill which guides through the full product lifecycle (discovery → design → build → test → deploy → maintain). Development work requires the same plan discipline as analytical work, plus: test before delivering, verify environment assumptions, investigate before fixing.
 
-### Storyboard before writing long deliverables
-For deliverables longer than a few paragraphs, build the storyline first — sequence of governing thoughts (claims/conclusions, not topic headings). Get the storyline right before filling in detail. Prevents the failure mode of individually coherent paragraphs that don't build toward a coherent whole.
-
-### Be concise in language, thorough in substance
-Be concise in language — no padding, no filler. But don't sacrifice depth or thoroughness. Don't skip verification or research to save tokens. Conciseness applies to how you communicate, not how much effort you invest. When there is a tension between concise and thorough, prefer thoroughness. The user will tell you to shorten when needed.
-
-### QA every substantive output before delivering — override the tendency to treat completion as quality
-Every substantive output must be QA'd before delivery — whether it's a final deliverable, a worker output in orchestrated work, an intermediate analysis, or a recommendation. QA is not a final-stage activity; it applies at every level of the work.
-
-**Structural trigger — QA self-check before any substantive delivery:** Before delivering any substantive output (to the user, to the orchestrator, or as a synthesized result), run this check:
-
-1. **Factual accuracy:** Have I verified that claims about real systems, documents, or data match the actual source? [YES/NO — if NO, verify against the authoritative source before delivering. Internal consistency is not sufficient — the output must also match external reality]
-2. **Assumption surfacing:** Have I identified the load-bearing assumptions and stated whether they are verified or unverified? [YES/NO]
-3. **Completeness:** Does the output address the full scope, or have I silently dropped items? [YES/NO]
-4. **Actively looked for problems:** Have I re-read the output looking for what's wrong with it — not just confirming it looks okay? [YES/NO — if NO, re-read now with a critical eye. Assume there are problems you haven't found yet. The tendency is to stop looking after finding the first few issues; override this by assuming more issues exist]
-
-For every response that contains analysis, recommendations, or deliverables, produce a visible QA Assessment using the checklist in `_foundation/qa-checklist.md`. For file-based deliverables, append it as a `## QA Assessment` section. For conversational responses, include the key elements visibly in your response: load-bearing assumptions with status, sources used with authority assessment, and scope check against the plan. Do not run QA "internally" — make it visible so the user can verify it.
-
-In orchestrated work: workers QA their own output before marking COMPLETE. The orchestrator QA's worker outputs substantively before presenting to the human (not just reading the gap report). The gap detector adds systematic verification. QA is everyone's responsibility at every level — like a consulting team where every team member owns quality regardless of seniority.
-
-**Sampling is not QA — override the tendency to spot-check and call it done.** The common failure mode: the orchestrator reads the opening, greps for structural elements, spot-checks one or two sections, confirms the verify criteria look met, and writes "CLEAN — proceed." This is structural compliance checking, not quality control. Thorough QA means: (1) read the full output end-to-end, not a sample, (2) independently verify at least the 2-3 most important factual claims (does the cited paper exist, does it say what the worker claims, is it authoritative?), (3) actively look for what's wrong — assume problems exist that you haven't found yet, (4) assess whether the output actually answers the question well, not just whether it follows the format. If the output is too long to read in full, that itself is a quality signal worth flagging — but it does not exempt you from reading it. For orchestrated work, consider dispatching a dedicated gap-detection agent for outputs over 300 lines.
-
-### Make sources visible — override the tendency to present conclusions without showing what they rest on
-Every substantive response should make its sources traceable. This complements the confidence-labeling rule: labels indicate certainty ("verified," "inference," "uncertain"); sources indicate provenance (what you're basing it on).
-
-For short responses: inline attribution is sufficient ("According to X's 2025 report..." or "Based on training data from...").
-
-For longer analyses, recommendations, or deliverables: include a **Sources** section at the end listing all primary inputs. Categorize each: web source (with URL), pre-trained knowledge (note knowledge cutoff), user-provided material ("per your [document]"), first-principles reasoning, or unverified source (explicitly marked). When a claim's source is mixed or uncertain, surface that in the sources section rather than hiding it.
-
----
-
-## Tool and Platform Behavior
-
-Operational plumbing — how to use the tools correctly.
-
-### Always check for relevant tools — override the tendency to assume tools don't exist
-Always ask if a plugin, connector, skill, or similar would be useful given what we are solving for. Provider capabilities evolve, so default to verification. Check if any exists.
-
-### Exhaust tool fallback chains — override the tendency to accept the first tool failure
-When a tool fails, don't accept it. Exhaust the full chain: WebFetch → WebSearch → Chrome browser tools. Especially critical when the user has pointed to a specific resource.
-
-### Use existing folder access directly — override the tendency to re-request permissions for subfolders
-When the parent folder is mounted, all subfolders are accessible. Don't re-request access. Use built-in Read/Write/Edit/Bash directly. Only escalate on an actual permission error.
-
-### Suggest the right tool for the task — cross-provider routing
-
-Two engagement patterns exist:
-
-- **Phase 2a — Single-strand.** One context window. Conversational iteration, document creation, research, formatted deliverables. The model may use internal tools (agents, search, etc.) as implementation tactics, but governance is simple: one plan, one conversation, one QA pass. Use handoff notes (`_foundation/handoff-note.md`) when a session breaks and a new one picks up, or for any cross-session continuity.
-- **Phase 2b — Multi-agent orchestrated.** Structured decomposition with formal governance: worker contracts, wave-based execution, gap detection, synthesis, retrospective. Requires Claude Code — this is architectural, not preference. Cowork cannot spawn independent subagents, offload context to parallel workers, or run background execution.
-
-**When to suggest switching to Code:** Multi-agent orchestration (Phase 2b) requires Claude Code. If the engagement pattern evaluation in Step 3 of the session-start checklist selects Phase 2b, flag that execution must happen in Code. Also suggest Code for: multi-file edits, coding, batch operations, git.
-
-**When to suggest switching to Cowork:** Conversational iteration where the work is single-strand, formatted document creation, browser research, plugin-based workflows. Code → Cowork only when the UX difference materially improves the outcome.
-
-Don't switch for minor inconveniences. The decision is driven by what the work requires, not tool preference.
-
-### Respect cross-provider memory sync
-Repository is single source of truth. Treat files from other providers as valid artifacts.
+### Session-end learning capture
+Before closing any substantive project session, identify 1-3 operational learnings that would improve future sessions. Write them to `LLM operating system/_context/session-learnings.jsonl` with date, project name, and the learning. Focus on process insights (what worked, what didn't, what we'd do differently) rather than domain knowledge (which belongs in project files).
 
 ---
 

@@ -7,21 +7,21 @@ Complete every step below in order before engaging with the user's request — n
 1. **Load user profile** — read who the user is (quick)
 2. **Identify the project** — is this continuation of existing work or something new? (quick)
 3. **Create the plan** — for new work only; this is the main phase (collaborative, may take several exchanges)
-4. **Load execution context** — skills, tools (quick)
+4. **Load execution context** — skills, tools, templates (quick)
 5. **Execute** — do the work, with ongoing checkpoints throughout, incl. wrapping up in the end
 
 Steps 1-2 and 4-5 are brief. Step 3 more extensive because this is where up front problem structuring happens — it has multiple sub-steps. Do not skip Step 3 to get to execution faster. Do not treat completion of Step 3 as the end — Steps 4 and 5 still follow.
 
 The behavioral rules aimed at ensuring "we solve the problem right" are already loaded via CLAUDE.md (they reload every turn). This checklist handles everything else especially how we initiate a task and ensure "we solve the right problem#". 
 
-All paths below are relative to the operating system root folder (the folder containing `_foundation/`, `_context/`, and `projects/`).
+All paths are relative to the `AI assisted/` root folder.
 
 ---
 
 ## Step 1: Load user profile
 
 Read this file:
-- `_foundation/personal-spec.md` — who the user is, professional context, preferences
+- `LLM operating system/_foundation/personal-spec.md` — who the user is, professional context, preferences
 
 **Verify:** Can you state the user's communication preference and professional context? [YES/NO — if NO, re-read the file]
 
@@ -29,7 +29,7 @@ Read this file:
 
 ## Step 2: Identify the project
 
-Read `_context/active-projects.md`.
+Read `LLM operating system/_context/active-projects.md`.
 
 Does an existing project's `plan.md` describe **this specific deliverable** — i.e. the exact question being answered, the exact output being produced, the exact scope of work?
 
@@ -210,13 +210,15 @@ Phase 2b must be justified — state why the work benefits from formal decomposi
 
 **If Phase 2b is selected,** the plan must also include: delegation approval status, worker topology and interfaces, worker deliverables and approval path, wave structure and checkpoint criteria, and process transparency / re-dispatch rules. These are detailed in the orchestration protocol.
 
-**Platform requirements for Phase 2b:**
-- **Cowork:** Cannot run Phase 2b. Complete the plan in Cowork, then hand the verified plan to Claude Code for execution.
+- **Development (Phase 2c):** When the work produces code — scripts, tools, automations, or full applications — invoke the `/dev` skill which guides through the full product lifecycle: discovery → design → build → test → deploy → maintain. The existing plan discipline still applies (plan before execution). Phase 2c adds: structured discovery/design before building, testing discipline during building, deployment discipline after building. Requires Claude Code. **Invoke `/dev` as the first action after the plan is confirmed** — the skill provides the step-by-step workflow.
+
+**Platform requirements:**
+- **Cowork:** Cannot run Phase 2b or 2c. Complete the plan in Cowork, then hand to Claude Code for execution.
 - **Delegation unavailable or not approved:** Downgrade explicitly to Phase 2a and record the trade-off.
 
 ### 3.10: Context specific / tasks specific skills and tools
 
-Keyword-match the problem definition and engagement type against available skills that would provide further guidance on how to solve for this specific problem / question (e.g. "competitor positioning assessment skill" — these are the built-in Anthropic skills / plugins) and tools. Propose which to load — the user confirms.
+Keyword-match the problem definition and engagement type against available skills that wold provide further guidance on how to solve for this specific problem / issues / question (e.g. "competitor positioning assessment skill". These are the built-in Anthropic skills / plugins), templates, and tools. Propose which to load — the user confirms. 
 
 ### 3.11: Current status
 
@@ -233,7 +235,7 @@ When the plan is substantively complete (key sections filled, critical assumptio
 **After the user confirms, complete these steps before ANY execution begins (including web searches, agent dispatch, or research):**
 
 1. **Verify plan.md is current** — does the file on disk reflect the confirmed version, including any changes from the final conversation round? Update if needed. [YES/NO]
-2. **Add a row** to `_context/active-projects.md` [YES/NO]
+2. **Add a row** to `LLM operating system/_context/active-projects.md` [YES/NO]
 3. **Create `.plan-confirmed`** marker in the working directory (cwd) [YES/NO]
 
 **If any answer is NO: do it now. Do not proceed to Step 4 until all three are YES.** The plan-gate hook will block execution tools until the marker exists.
