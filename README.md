@@ -28,7 +28,7 @@ The system has been tested against Claude Opus 4.6 out of the box using 49 autom
 
 Professionals who use Claude for work where **being "right" and quality of output matters more than being fast**. Or anyone who has had the classic "you're absolutely right, I just made that up" experience with Claude too many times.
 
-It's not for software development (though it runs on Claude Code infrastructure) - there are many operating systems out there that are tailored to software development. It's also not for quick factual questions — for those, just use Chat or tell Claude to ignore the operating system.
+It's built primarily for analytical work — strategy, research, due diligence, advisory — but also includes a development workflow for building software with Claude as the builder. It's not for quick factual questions — for those, just use Chat or tell Claude to ignore the operating system.
 
 ### What you get that you don't already have
 
@@ -50,9 +50,13 @@ Out of the box, Claude is optimized for helpfulness and fluency — which works 
 
 **Structured QA before delivery.** Claude checks how what it has delivered compares to the plan and whatever quality criteria you have formulated — before presenting it to you.
 
-**Multi-agent orchestration.** For complex work with separable parallel tracks, Claude Code can decompose the work into parallel worker agents, each with a formal contract, quality checks, and gap detection. An orchestrator manages the execution and synthesizes results. This isn't available out of the box.
+**Multi-agent orchestration.** For complex work with separable parallel tracks, Claude Code can decompose the work into parallel worker agents, each with a formal contract, quality checks, and gap detection. An orchestrator manages the execution and synthesizes results across all tracks. Invoke `/orchestrate` to load the full orchestration protocol.
+
+**Development workflow.** When the work produces code — from scripts to full-stack applications — invoke `/dev` to activate a guided product lifecycle: discovery, design, build, test, deploy, and maintain. Includes testing discipline (every fix gets a regression test), debugging methodology (no fixes without root cause investigation), and scope control. Designed for non-developers who build with Claude as the primary coder.
 
 **Automatic enforcement via hooks (Claude Code).** 10 hooks run during Claude Code sessions — mechanically enforcing behaviors that text-based rules can't guarantee. Including: enforcing the startup checklist, nudging the quality gate before every response, blocking execution until a plan is confirmed, reminding to assess source authority before searches, agent contract and orchestration quality checks, periodic checkpoint reminders, preserving critical context before compaction, and QA checks on deliverables. These work alongside the behavioral rules, not instead of them.
+
+**Modular rules architecture.** Behavioral rules are split between CLAUDE.md (core governance, loaded every turn) and `.claude/rules/` files (communication quality, tool behavior — loaded automatically but as separate files). This keeps each file under Anthropic's recommended 200-line limit for optimal instruction compliance.
 
 ## The system comes with tradeoffs
 
@@ -76,13 +80,21 @@ It makes the process of going from prompt to answer slower and burns a few more 
 
 2. **Run the setup prompt.** Open a new Claude session (Cowork or Code), select that folder, and paste the contents of `setup-prompt.md` into the chat. Claude walks you through a brief interview (who you are, what work you do, how you prefer to communicate), creates your personal profile, and configures the system.
 
-That's it. The setup prompt handles everything — path configuration, file placement, verification.
+That's it. The setup prompt handles everything — path configuration, file placement, hook installation, skill registration, and verification.
 
 ### Will this break anything?
 
-No. The operating system is just files in a folder. Claude reads them — that's all that happens. There are no plugins to install, no system modifications, no code to run.
+No. The operating system is just files in a folder plus configuration in your Claude settings. Specifically, setup creates or modifies:
 
-**To remove it:** Delete the files and clear your CLAUDE.md. Back to Claude out of the box in seconds. An uninstall prompt is included that does this for you — paste the contents of `uninstall-prompt.md` and Claude will clean up.
+- `~/.claude/CLAUDE.md` — behavioral rules (a text file Claude reads)
+- `~/.claude/rules/` — modular rule files (text files Claude reads)
+- `~/.claude/skills/` — skill files for `/dev`, `/orchestrate`, and TTS commands
+- `~/.claude/settings.json` — hook configurations (merged with your existing settings)
+- Global Instructions (Cowork only) — a text pointer to the checklist
+
+None of these affect your system outside of Claude. No system modifications, no background processes, no plugins that run without your knowledge.
+
+**To remove it:** Paste the contents of `uninstall-prompt.md` into any Claude Code session. Claude will remove the CLAUDE.md, rules files, skills, hook configurations, and Global Instructions — returning you to Claude out of the box. The operating system files in your folder remain untouched in case you want to re-enable later.
 
 ### How CLAUDE.md and Global Instructions work
 
@@ -111,9 +123,21 @@ For a detailed explanation of the architecture, behavioral rules, structural tri
 
 ---
 
+## Skills
+
+Skills are on-demand workflow methodologies loaded with a slash command. They don't affect your sessions until you invoke them.
+
+| Skill | Command | What it does |
+|---|---|---|
+| **Development** | `/dev` | Full product lifecycle: discovery → design → build → test → deploy → maintain. For non-developers building with Claude. |
+| **Orchestration** | `/orchestrate` | Multi-agent workflow with contracts, gap detection, and cross-cutting synthesis. |
+| **TTS Convert** | `/tts-convert` | Converts Markdown to a TTS-friendly format optimized for listening. |
+| **TTS Play** | `/tts-play` | Reads any Markdown file aloud on desktop using neural voices. |
+| **TTS Save** | `/tts-save` | Converts Markdown to MP3 for mobile listening via cloud sync. |
+
 ## Tools
 
-**[Read Aloud](tools/read-aloud/)** — converts Markdown project outputs to speech using Microsoft's free neural voices. Useful for reviewing long research outputs, analysis documents, and orchestration results without reading them on screen. Works on Windows, macOS, and Linux. See [tools/read-aloud/README.md](tools/read-aloud/README.md) for setup.
+**[Read Aloud](tools/read-aloud/)** — the script behind the TTS skills. Converts Markdown to speech using Microsoft's free neural voices. Works on Windows, macOS, and Linux. See [tools/read-aloud/README.md](tools/read-aloud/README.md) for standalone setup.
 
 ---
 
@@ -122,12 +146,13 @@ For a detailed explanation of the architecture, behavioral rules, structural tri
 This system was built on ideas and patterns from several people and projects:
 
 - [**Anthropic**](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) — the context engineering guide that articulates the core principle: the infrastructure around the model matters as much as the model itself
-- [**affaan-m/everything-claude-code**](https://github.com/affaan-m/everything-claude-code) — hook-based automation patterns, strategic compaction, continuous learning architecture
+- [**garrytan/gstack**](https://github.com/garrytan/gstack) — role-switching architecture for development workflows, testing enforcement chain, the Iron Law of debugging
+- [**gsd-build/get-shit-done**](https://github.com/gsd-build/get-shit-done) — fresh-context-per-agent execution, spec-driven development, thin orchestrator pattern
+- [**affaan-m/everything-claude-code**](https://github.com/affaan-m/everything-claude-code) — hook-based automation patterns, continuous learning loop, graduated enforcement profiles
 - [**msitarzewski/agency-agents (The Agency)**](https://github.com/msitarzewski/agency-agents) — the "override the tendency to..." behavioral formulation, and the insight that agent personality is structural, not cosmetic
+- [**vinicius91carvalho/.claude**](https://github.com/vinicius91carvalho/.claude) — deterministic hook enforcement patterns: test-existence checks, end-of-turn type checking, INVARIANTS.md
 - [**Obie Fernandez**](https://obie.medium.com/building-a-personal-cto-operating-system-with-claude-code-b3fb9c4933c7) — the "Personal CTO Operating System" concept that showed what a file-based behavioral layer can do
 - [**Hamel Husain**](https://hamel.dev/blog/posts/evals-skills/) — evaluation methodology and the principle of infrastructure over model capability
-- [**VoltAgent/awesome-codex-subagents**](https://github.com/VoltAgent/awesome-codex-subagents) — context isolation and multi-agent patterns
-- **Rohit** — ["The Harness Is Everything"](https://x.com/) synthesis of harness engineering practices across SWE-agent, Anthropic, and OpenAI
 - [**ACE (ICLR 2026)**](https://blog.softmaxdata.com/the-biggest-lesson-from-ace-iclr-2026-the-power-of-agentic-engineering/) — delta updates preserve institutional knowledge; complete rewrites cause context collapse
 - [**Chroma Research**](https://research.trychroma.com/context-rot) — context rot research showing compressed context can outperform uncompressed
 
