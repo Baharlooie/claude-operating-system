@@ -61,26 +61,29 @@ process.stdin.on('end', () => {
     }
 
     // Marker exists — but validate plan.md has the required structure
-    // Search for the most recent plan.md in project subfolders
-    const glob = require('path');
+    // Scope: only validate the plan.md for the CURRENT project (walk up from file_path)
+    // Never do a tree-wide search — that produces false-positive warnings about unrelated projects
     let planWarning = '';
     try {
-      // Find plan.md files modified in the last hour
-      const findPlan = (dir, depth) => {
-        if (depth <= 0) return null;
-        try {
-          const entries = fs.readdirSync(dir, { withFileTypes: true });
-          for (const e of entries) {
-            if (e.name === 'plan.md' && e.isFile()) return path.join(dir, e.name);
-            if (e.isDirectory() && !e.name.startsWith('.') && !e.name.startsWith('_') && e.name !== 'node_modules') {
-              const found = findPlan(path.join(dir, e.name), depth - 1);
-              if (found) return found;
-            }
-          }
-        } catch (err) {}
+      // Find plan.md by walking up from the file being edited
+      const findRelevantPlan = (filePath, cwd) => {
+        if (!filePath) return null; // No file_path (e.g. Bash) → skip validation
+        // Normalize both paths to native format (handles forward/backslash mixing on Windows)
+        const absPath = path.resolve(path.isAbsolute(filePath) ? filePath : path.join(cwd, filePath));
+        const cwdNormalized = path.resolve(cwd);
+        let currentDir = path.dirname(absPath);
+        // Walk up at most 10 levels, stop at cwd or filesystem root
+        for (let i = 0; i < 10; i++) {
+          const candidatePath = path.join(currentDir, 'plan.md');
+          if (fs.existsSync(candidatePath)) return candidatePath;
+          const parentDir = path.dirname(currentDir);
+          if (parentDir === currentDir) break; // filesystem root
+          if (!parentDir.startsWith(cwdNormalized) && parentDir !== cwdNormalized) break; // went above cwd
+          currentDir = parentDir;
+        }
         return null;
       };
-      const planPath = findPlan(path.join(cwd, 'projects'), 4);
+      const planPath = findRelevantPlan(filePath, cwd);
       if (planPath) {
         const planContent = fs.readFileSync(planPath, 'utf8');
         const requiredSections = ['Quality drivers', 'Success criteria', 'Scope', 'Sources', 'Approach'];
