@@ -1,0 +1,7 @@
+# Local patterns file — contains sensitive terms that must never be committed.
+# Use sensitive-patterns.example.txt as a template.
+.githooks/sensitive-patterns.txt
+
+# Local plan-gate marker (internal bookkeeping, not for distribution)
+.plan-skipped
+.plan-confirmed
