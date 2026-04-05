@@ -86,18 +86,28 @@ process.stdin.on('end', () => {
       const planPath = findRelevantPlan(filePath, cwd);
       if (planPath) {
         const planContent = fs.readFileSync(planPath, 'utf8');
+        // Case-insensitive section matching — the user retains control over heading case
+        const contentLower = planContent.toLowerCase();
         const requiredSections = ['Quality drivers', 'Success criteria', 'Scope', 'Sources', 'Approach'];
-        const missing = requiredSections.filter(s => !planContent.includes(s));
+        const missing = requiredSections.filter(s => !contentLower.includes(s.toLowerCase()));
         if (missing.length > 0) {
           planWarning = 'PLAN STRUCTURE WARNING: plan.md at ' + planPath + ' is missing sections: ' + missing.join(', ') + '. The plan should follow the 11-section structure from the session-start checklist.';
         } else {
-          // Expansion check: the Approach section must list 3+ distinct alternatives
-          // Extract the Approach section (from "Approach" heading to next heading or end of file)
-          const approachMatch = planContent.match(/(^|\n)#{1,4}\s*[^\n]*Approach[^\n]*\n([\s\S]*?)(?=\n#{1,4}\s|$)/i);
-          if (approachMatch) {
-            const approachSection = approachMatch[2];
+          // Expansion check: the Approach section must list 3+ distinct alternatives.
+          // Level-aware extraction: find the Approach heading, capture its hash count,
+          // then terminate at the next heading AT OR ABOVE that level (so h3 subsections
+          // under a h2 Approach heading don't truncate extraction).
+          const headingMatch = planContent.match(/(^|\n)(#{1,4})\s*[^\n]*Approach[^\n]*(\n|$)/i);
+          if (headingMatch) {
+            const hashCount = headingMatch[2].length;
+            const startPos = headingMatch.index + headingMatch[0].length;
+            // Next heading at same-or-higher level (1 to hashCount # chars)
+            const terminationRegex = new RegExp('\\n#{1,' + hashCount + '}\\s', 'g');
+            terminationRegex.lastIndex = startPos;
+            const termMatch = terminationRegex.exec(planContent);
+            const endPos = termMatch ? termMatch.index : planContent.length;
+            const approachSection = planContent.substring(startPos, endPos);
             // Count alternative markers: "Option 1/2/3", "Approach A/B/C", "Alternative 1/2/3"
-            // Case-insensitive, allows optional colon/period after the label
             const optionMatches = approachSection.match(/(?:^|\n)\s*[-*]?\s*\*{0,2}(?:Option|Alternative)\s+[1-9A-Za-z]\b/gi) || [];
             const approachLetterMatches = approachSection.match(/(?:^|\n)\s*[-*]?\s*\*{0,2}Approach\s+[A-Z1-9]\b/gi) || [];
             // Also count numbered list items within the section (1., 2., 3.)
