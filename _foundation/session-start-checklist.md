@@ -173,6 +173,12 @@ If the work is purely execution-based (editing files, running code) with no rese
 
 **Approach and rationale.** How will we tackle this? What are the key phases or steps? Are there multiple workstreams, and if so, how do they sequence? Why this approach over alternatives? What alternatives were considered and why rejected? Document the reasoning — it prevents re-litigating decisions later.
 
+**Expansion — consider multiple approaches before choosing one.** "What alternatives were considered" is not a one-line justification for the approach you already picked. Before selecting an approach, list **3–5 distinct alternatives, including 1–3 unconventional ones** — options that break from the obvious framing, challenge a default assumption, or come from an adjacent domain. For each, give a one-line description, the key strength, and the key weakness. Then state the recommended approach with reasoning for why the others were rejected.
+
+**Important — consider ≠ solve.** Expansion means considering alternatives at a high level (description, strength, weakness), NOT executing each one end-to-end. Solving the problem under multiple approaches is a different task (a comparison analysis). Here, you are surfacing the option space so the chosen approach is a genuine selection rather than the first plausible path. Keep each alternative to 1–3 sentences.
+
+**Why this matters.** The model's default is to commit to the first sensible approach and justify it post-hoc. That produces locally coherent plans that miss better paths. Forcing a short list of alternatives — especially unconventional ones — surfaces the option space and makes the chosen approach a genuine selection rather than a foregone conclusion. This is inspired by the Expansion step in structured decision frameworks (e.g., Dansk Industri's CEER): deliberately widening before narrowing.
+
 **Working procedures.** How is this project actually done? This section starts sparse and is filled as procedures emerge during execution. It exists because compaction drops procedural knowledge — "what was decided" survives but "how things are done" doesn't. Include: who does what, tools/commands used, interaction patterns, constraints on how work is done, file paths and environment details. When a procedure has reuse value beyond this project, also export it as a standalone file in the project folder.
 
 **Reference points.** Examples of what good looks like, or anti-patterns to avoid. Can be empty for novel work — but when a reference exists, it's extremely high-value.

@@ -87,6 +87,26 @@ process.stdin.on('end', () => {
         const missing = requiredSections.filter(s => !planContent.includes(s));
         if (missing.length > 0) {
           planWarning = 'PLAN STRUCTURE WARNING: plan.md at ' + planPath + ' is missing sections: ' + missing.join(', ') + '. The plan should follow the 11-section structure from the session-start checklist.';
+        } else {
+          // Expansion check: the Approach section must list 3+ distinct alternatives
+          // Extract the Approach section (from "Approach" heading to next heading or end of file)
+          const approachMatch = planContent.match(/(^|\n)#{1,4}\s*[^\n]*Approach[^\n]*\n([\s\S]*?)(?=\n#{1,4}\s|$)/i);
+          if (approachMatch) {
+            const approachSection = approachMatch[2];
+            // Count alternative markers: "Option 1/2/3", "Approach A/B/C", "Alternative 1/2/3"
+            // Case-insensitive, allows optional colon/period after the label
+            const optionMatches = approachSection.match(/(?:^|\n)\s*[-*]?\s*\*{0,2}(?:Option|Alternative)\s+[1-9A-Za-z]\b/gi) || [];
+            const approachLetterMatches = approachSection.match(/(?:^|\n)\s*[-*]?\s*\*{0,2}Approach\s+[A-Z1-9]\b/gi) || [];
+            // Also count numbered list items within the section (1., 2., 3.)
+            const numberedListMatches = approachSection.match(/(?:^|\n)\s*[1-9]\.\s+\S/g) || [];
+            const totalAlternatives = Math.max(
+              optionMatches.length + approachLetterMatches.length,
+              numberedListMatches.length
+            );
+            if (totalAlternatives < 3) {
+              planWarning = 'EXPANSION WARNING: plan.md at ' + planPath + ' Approach section has only ' + totalAlternatives + ' distinct alternatives listed. The plan template (section 3.6) requires 3-5 distinct approaches (including 1-3 unconventional ones) before selecting the recommended one. Consider: "Option 1/2/3", "Approach A/B/C", or a numbered list. This surfaces the option space so the chosen approach is a genuine selection.';
+            }
+          }
         }
       }
     } catch (e) {}
