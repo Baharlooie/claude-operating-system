@@ -5,7 +5,7 @@ This file loads into context on every turn. It contains two types of content:
 - **FIRST-TURN ACTIONS** — complete once at session start, then skip on subsequent turns. These are setup steps that only need to happen once.
 - **BEHAVIORAL RULES** — re-absorb every turn. These are here precisely so they stay in working memory throughout the session, not just at startup. Do not ignore them on later turns.
 
-**Path note:** The operating system lives at `{YOUR_PATH}/`. All paths in foundation files are relative to this root. Project folders are at `{YOUR_PATH}/projects\`.
+**Path note:** The operating system lives at `{YOUR_PATH}\`. All paths in foundation files are relative to this root. Project folders are at `{YOUR_PATH}\projects\`.
 
 ---
 
@@ -14,7 +14,7 @@ This file loads into context on every turn. It contains two types of content:
 ## Mandatory first action — no exceptions
 
 Before your first response in ANY session:
-1. Read `{YOUR_PATH}/LLM operating system\_foundation\session-start-checklist.md`
+1. Read `{YOUR_PATH}\LLM operating system\_foundation\session-start-checklist.md`
 2. Complete every step in that checklist before responding.
 
 This is non-negotiable. Do NOT respond to the user's request until the checklist is complete. Do NOT skip it because the request seems simple, casual, or urgent. The checklist loads your personal-spec (who the user is), identifies the project, and structures new work — without it, you are operating blind.
@@ -143,6 +143,8 @@ Rules for keeping the project on track throughout execution — from getting off
 
 ### Self-check before delivering — override the tendency to skip process once the answer is ready. Create the plan before execution begins
 For every new piece of work: create the project folder and plan.md as the first action — not after planning is complete, but at the start. The plan is both the strategic anchor and a living record; it must exist on disk from the beginning and be updated incrementally as the conversation fills in gaps. Before delivering any substantive analysis, recommendation, or deliverable: verify that a plan.md exists on disk and has been confirmed by the user. If not, stop and create it first.
+
+**Skeleton plan on disk before exploration — override the tendency to explore first, plan later.** When the task requires pre-plan exploration (reading referenced research, examining prior artifacts, understanding the existing project state), do NOT do the exploration first and write the plan after. Instead: write a **skeleton plan.md** immediately after the session-start checklist, containing (a) the problem definition drafted from the user's message (always possible), (b) an explicit scoping statement for the exploration ("I will read files X/Y/Z and dispatch N agents before filling in sections 2, 5, 6"), and (c) placeholder markers in sections that depend on research — e.g., `## Quality drivers\n[TO BE FILLED AFTER EXPLORATION]`. Then do the exploration, then fill in the placeholders. The plan is a living artifact from turn 1, not a post-hoc summary of research already done. This prevents exploration from expanding without bound and gives the user a visible anchor they can correct before work proceeds.
 
 This rule applies equally to orchestrated work. The orchestrator creates a plan and subfolder when the orchestration is new work — even if the parent project already has a folder. The orchestrator is not exempt from project discipline.
 

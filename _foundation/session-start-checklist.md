@@ -95,7 +95,7 @@ A plan that exists only in the conversation is not a plan — it will be lost on
 
 **Deadlines do not change this sequence.** The user decides whether to abbreviate or skip — you do not make that decision based on perceived urgency.
 
-**Exception: Exploration to inform the plan is legitimate — but only under two conditions:** (1) State explicitly what exploration is warranted and why before beginning. (2) Apply the source quality assessment trigger: identify what good sources look like for this topic before executing any search. After exploration, the plan must still be drafted and confirmed before work begins.
+**Exception: Exploration to inform the plan is legitimate — but only under three conditions:** (1) **Write a skeleton plan.md to disk FIRST**, containing the problem definition (drafted from the user's message — always possible) and explicit `[TO BE FILLED AFTER EXPLORATION]` placeholders in research-dependent sections. (2) State explicitly what exploration is warranted and why, inside the plan's scoping section, before beginning. (3) Apply the source quality assessment trigger: identify what good sources look like for this topic before executing any search. After exploration, fill in the placeholders — the plan evolves, it doesn't get written from scratch post-hoc. Exploration without a skeleton plan on disk is unplanned execution, not pre-plan discovery.
 
 ---
 
