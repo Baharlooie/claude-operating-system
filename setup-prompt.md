@@ -145,6 +145,11 @@ Configure the hooks in `~/.claude/settings.json`. Read the existing file first, 
             "type": "command",
             "command": "node \"[their path]/_foundation/hooks/quality-gate-reminder.js\"",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "node \"[their path]/_foundation/hooks/post-compaction-injector.js\"",
+            "timeout": 5
           }
         ]
       }
@@ -167,7 +172,7 @@ Configure the hooks in `~/.claude/settings.json`. Read the existing file first, 
         "hooks": [
           {
             "type": "command",
-            "command": "node \"[their path]/_foundation/hooks/pre-compaction-saver.js\"",
+            "command": "node \"[their path]/_foundation/hooks/compaction-marker-writer.js\"",
             "timeout": 5
           }
         ]

@@ -19,7 +19,7 @@ I want to remove the Claude Operating System from my system. Please do the follo
    
    Leave any other skills that aren't from the operating system.
 
-4. **Remove hooks from settings.json.** Read `~/.claude/settings.json`. Remove all hook entries under `"hooks"` that reference files in the operating system's `_foundation/hooks/` directory. These include hooks for: plan-gate, source-check-reminder, agent-contract-check, checkpoint-reminder, gap-detection-reminder, qa-appendix-check, checklist-enforcer, quality-gate-reminder, subagent-orchestrator-reminder, and pre-compaction-saver. Preserve any other settings (permissions, effortLevel, etc.) and any hooks that aren't from the operating system.
+4. **Remove hooks from settings.json.** Read `~/.claude/settings.json`. Remove all hook entries under `"hooks"` that reference files in the operating system's `_foundation/hooks/` directory. These include hooks for: plan-gate, source-check-reminder, agent-contract-check, checkpoint-reminder, gap-detection-reminder, qa-appendix-check, checklist-enforcer, quality-gate-reminder, subagent-orchestrator-reminder, compaction-marker-writer, and post-compaction-injector. Preserve any other settings (permissions, effortLevel, etc.) and any hooks that aren't from the operating system.
 
 5. **Clear Global Instructions (if applicable).** If I'm using Claude Desktop with Cowork, remind me to go to Settings → Cowork → Global Instructions → Edit and clear the text that points to the session-start checklist.
 

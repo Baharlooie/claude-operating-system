@@ -188,8 +188,14 @@ Deliver all parts of a multi-part request. Don't stop after the first and ask wh
 
 Don't lose what's been established. Step back periodically. Persist context across session events.
 
+**Two related but distinct concepts — keep them clear:**
+- **State consistency** (our mechanism): keeping plan.md and related project files current as work progresses, so a durable record exists on disk. **Soft enforcement** — behavioral rules here, the user triggers state-consistency updates manually when context is filling up ("update plan.md now"). No automatic cadence hook — premature writes are noise, especially with 1M-token context.
+- **Compaction** (Claude's event): internal context compression triggered by `/compact` or automatic at context limit. Not ours to shape. **Strong enforcement for recovery after it happens**: a PreCompact hook writes a marker file; a UserPromptSubmit hook reads it on the next prompt and injects a mandatory "re-read plan.md" reminder. Mechanical, not skippable.
+
+The link: state consistency is the defense against compaction. If plan.md is current when compaction fires, recovery is fast because the durable record already exists.
+
 ### Run the compaction checkpoint after every compaction event
-Mandatory after every compaction event. 5-item check: (1) Re-read plan.md (the behavioral rules in CLAUDE.md are always loaded, but the plan may have drifted from memory). (2) Check working procedures in plan.md. (3) Review todo — does it match plan.md commitments? (4) State the success criteria without looking. (5) Do you remember these behavioral rules? If any answer is NO, fix before continuing. Don't rely on compaction summaries for procedural details.
+Mandatory after every compaction event. The `post-compaction-injector.js` hook automatically surfaces this reminder on your first prompt post-compaction — treat the injected reminder as a hard gate to complete before responding. 5-item check: (1) Re-read plan.md (the behavioral rules in CLAUDE.md are always loaded, but the plan may have drifted from memory). (2) Check working procedures in plan.md. (3) Review todo — does it match plan.md commitments? (4) State the success criteria without looking. (5) Do you remember these behavioral rules? If any answer is NO, fix before continuing. Don't rely on compaction summaries for procedural details.
 
 ### Run periodic checkpoints during execution
 Every 8-10 exchanges: (1) What are we optimizing for? State it. (2) Is what I'm about to do aligned with plan.md? (3) Any unrecorded commitments? (4) Is plan.md still current? If significant progress has been made since the last update, update it now. (5) At natural phase transitions (research → synthesis, analysis → recommendations, drafting → finalization), pause and synthesize progress before continuing.
