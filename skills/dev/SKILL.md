@@ -100,15 +100,17 @@ After writing code, explicitly switch mode:
 
 > "Switching to Tester. I'm now going to try to break what I just built."
 
-**Tester checklist:**
-- [ ] **Run it.** Does it actually execute without errors?
-- [ ] **Test the happy path.** Does the feature work as specified?
-- [ ] **Test edge cases.** Empty inputs, very long inputs, special characters, missing data.
-- [ ] **Test error handling.** What happens when things go wrong? Are error messages helpful?
-- [ ] **Verify environment.** Will this work in the TARGET environment (not just the Claude Code shell)? Check: paths, dependencies, permissions, environment variables.
-- [ ] **Check the PRD acceptance criteria.** Does this meet the specific criteria listed?
+**Tester checklist — each item needs EVIDENCE, not self-report:**
+- [ ] **Run it.** Does it actually execute without errors? [Cite the exact command + first 3-5 lines of output.]
+- [ ] **Test the happy path.** Does the feature work as specified? [Cite the test input + the observed output.]
+- [ ] **Test edge cases.** Empty inputs, very long inputs, special characters, missing data. [Cite the edge case + what happened.]
+- [ ] **Test error handling.** What happens when things go wrong? Are error messages helpful? [Cite the error triggered + the message produced.]
+- [ ] **Verify environment.** Will this work in the TARGET environment (not just the Claude Code shell)? Check: paths, dependencies, permissions, environment variables. [Cite the verification command + output.]
+- [ ] **Check the PRD acceptance criteria.** Does this meet the specific criteria listed? [Cite each criterion + the test that proves it met.]
 
-**Do not deliver code that hasn't passed the Tester checklist.**
+**Evidence trail — every QA claim needs a reproducible trace.** "I verified it" without a command + output is not verification. Pattern matching (grep, sentence-counts, regex checks) is NOT QA — it's a heuristic that doesn't test behavior. "I read the code carefully" is NOT execution. "I grep'd for a pattern" is NOT testing. For visual artifacts (HTML, UI), grep cannot verify render quality — you must render and inspect (headless browser screenshot, or ship to user for visual confirmation).
+
+**Do not deliver code that hasn't passed the Tester checklist with evidence for each item.**
 
 ### 3.4 The Reviewer hat — periodically
 
@@ -128,6 +130,7 @@ Every 3-5 features, or before any major milestone:
 - **Every fix gets a regression test.** When fixing a bug, write a test that fails without the fix and passes with it.
 - **Tests gate "done."** A feature is not done until its tests pass.
 - **Test framework bootstrap:** If the project has no tests, set one up (pytest for Python, vitest for TypeScript). Claude handles this — the user doesn't need to know how testing frameworks work.
+- **Repeated failures become mechanical checks.** If the same mistake happens twice (e.g., wrong voice used, external URL breaks, image missing, layout overlap), write a script that auto-fails on that exact pattern. "I'll be more careful next time" is not a fix. Example assertions: "every `<audio>` src path exists on disk"; "English text uses en-* voice, Danish text uses da-* voice"; "no external image URLs in shipped HTML"; "every CSS absolute position has explicit z-index". Run the assertion script before every delivery.
 
 ### 3.6 Debugging discipline (Iron Law)
 
@@ -209,13 +212,15 @@ If the product is generating revenue, growing, or handling sensitive data, consi
 
 ### Code delivery pre-check (before EVERY delivery of code to the user)
 
-Before saying "done" or "here's the code" or delivering any code:
+Before saying "done" or "here's the code" or delivering any code — **answer each with evidence, not self-assertion:**
 
-1. **Has this been executed at least once?** [YES/NO — if NO, run it now]
-2. **Has it been tested in the target environment?** [YES/NO — if NO, verify]
-3. **Are environment assumptions verified (paths, dependencies, permissions)?** [YES/NO — if NO, check]
-4. **Are error messages helpful (not just stack traces)?** [YES/NO — if NO, improve]
-5. **Has the user been told how to run it, what to install, and what to expect?** [YES/NO — if NO, provide instructions]
+1. **Has this been executed at least once?** [YES — quote the exact command you ran + the first 3-5 lines of output that proves execution / NO — run it now. "I wrote it carefully" is NOT execution. "I grep'd for patterns" is NOT execution. If the artifact is visual (HTML, UI), rendering it is required — grep can't verify visual correctness.]
+2. **Has it been tested in the target environment?** [YES — cite the test + what happened / NO — verify now]
+3. **Are environment assumptions verified (paths, dependencies, permissions)?** [YES — cite the check command + output / NO — check now]
+4. **Are error messages helpful (not just stack traces)?** [YES — cite one triggered error + the message / NO — improve]
+5. **Has the user been told how to run it, what to install, and what to expect?** [YES — summarize what you told them / NO — provide instructions]
+
+**If you can't cite evidence for an item, you haven't done it.** The purpose of this check is to surface shortcuts before delivery, not after.
 
 ### Testing chain
 
