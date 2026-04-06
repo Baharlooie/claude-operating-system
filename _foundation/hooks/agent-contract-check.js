@@ -29,16 +29,34 @@ process.stdin.on('end', () => {
                     fs.existsSync(path.join(cwd, '.plan-skipped'));
 
     // Detect contract file reference in prompt
-    // Pattern: any path ending in .md that contains "contracts" (case-insensitive)
-    const contractRefMatch = agentPrompt.match(/[^\s"'`]*contracts?[\/\\][^\s"'`]+\.md/i);
+    // Paths with spaces are common (e.g., "AI assisted", "children friendly").
+    // Strategy: try quoted paths first, then labeled ("Contract file: ..."),
+    // then unquoted (simple no-space paths).
     let contractFileValid = false;
     let contractFileReferenced = null;
-    if (contractRefMatch) {
-      contractFileReferenced = contractRefMatch[0];
+    // 1. Quoted paths: backtick, double-quote, single-quote wrapping a contracts path
+    const backtickMatch = agentPrompt.match(/`([^`]*contracts?[\/\\][^`]+\.md)`/i);
+    const dblQuoteMatch = agentPrompt.match(/"([^"]*contracts?[\/\\][^"]+\.md)"/i);
+    const sglQuoteMatch = agentPrompt.match(/'([^']*contracts?[\/\\][^']+\.md)'/i);
+    const quotedRef = backtickMatch ? backtickMatch[1]
+      : dblQuoteMatch ? dblQuoteMatch[1]
+      : sglQuoteMatch ? sglQuoteMatch[1]
+      : null;
+    // 2. Labeled: "Contract file:", "Contract at:", "contract:" followed by path ending .md
+    const labeledMatch = agentPrompt.match(/[Cc]ontract\s*(?:file|at)?[:\s]+([A-Za-z.~\/\\][^\n]*?\.md)\b/i);
+    const labeledRef = labeledMatch && /contracts?[\/\\]/i.test(labeledMatch[1])
+      ? labeledMatch[1].trim() : null;
+    // 3. Unquoted: no-space path (works for simple paths like orchestration/contracts/x.md)
+    const unquotedMatch = agentPrompt.match(/\S*contracts?[\/\\]\S+\.md/i);
+    const unquotedRef = unquotedMatch ? unquotedMatch[0] : null;
+    // Priority: quoted > labeled (handles spaces) > unquoted (simple paths)
+    const rawRef = quotedRef || labeledRef || unquotedRef || null;
+    if (rawRef) {
+      contractFileReferenced = rawRef;
       // Verify the file exists (absolute path or relative to cwd)
       const absPath = path.isAbsolute(contractFileReferenced)
-        ? contractFileReferenced
-        : path.join(cwd, contractFileReferenced);
+        ? path.resolve(contractFileReferenced)
+        : path.resolve(path.join(cwd, contractFileReferenced));
       if (fs.existsSync(absPath)) {
         contractFileValid = true;
       }
