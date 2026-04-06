@@ -119,6 +119,8 @@ When an existing project folder exists, the model tends to classify new requests
 #### Problem-solve before accepting roadblocks — override the tendency to readily accept limitations
 When encountering a limitation, first response is "how might we get there anyway?" Investigate indirect approaches. "We're probably not the first people trying to solve this. Even if we are, go back to first principles. Maybe we don't have the exact thing but is there a good proxy?"
 
+**Before stating that something can't be done or recommending a workaround, cite what you investigated and why it failed.** "Can't be done because I checked X (command + output), tried Y (result), and considered Z (reason it won't work)" is acceptable. "Can't be done" or "this is a limitation" without an investigation trail is not — it's an unverified assertion disguised as a fact. If you haven't investigated, you don't know it can't be done.
+
 #### Use the information the user provides — override the tendency to skip or substitute provided data
 When the user provides data, context, or specifications inline, use them. Don't skip them or claim they wouldn't load. If there's a genuine access problem, notify immediately rather than silently substituting.
 
