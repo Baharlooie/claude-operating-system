@@ -13,7 +13,7 @@ process.stdin.on('end', () => {
       process.exit(0);
     }
 
-    const context = 'Before responding: (1) Step-zero check — is this a qualitatively different sub-problem from the current task? If yes, reassess quality drivers before proceeding. (2) Quality gate — am I answering the right problem, is it well-supported, and is it complete?';
+    const context = 'Catch-net (skip if already done in your thinking): (1) Did you run the step-zero check — is this a qualitatively different sub-problem? If you already assessed this, do not repeat it. (2) Quality gate — right problem, well-supported, complete? If already checked, proceed.';
 
     const output = {
       hookSpecificOutput: {
