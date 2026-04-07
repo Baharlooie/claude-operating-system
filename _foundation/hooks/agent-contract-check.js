@@ -30,37 +30,42 @@ process.stdin.on('end', () => {
 
     // Detect contract file reference in prompt
     // Paths with spaces are common (e.g., "AI assisted", "children friendly").
-    // Strategy: try quoted paths first, then labeled ("Contract file: ..."),
-    // then unquoted (simple no-space paths).
+    // Strategy: collect ALL candidate paths from the prompt, then check each.
+    // If ANY resolves to an existing file, the check passes.
     let contractFileValid = false;
     let contractFileReferenced = null;
+    const candidates = [];
     // 1. Quoted paths: backtick, double-quote, single-quote wrapping a contracts path
-    const backtickMatch = agentPrompt.match(/`([^`]*contracts?[\/\\][^`]+\.md)`/i);
-    const dblQuoteMatch = agentPrompt.match(/"([^"]*contracts?[\/\\][^"]+\.md)"/i);
-    const sglQuoteMatch = agentPrompt.match(/'([^']*contracts?[\/\\][^']+\.md)'/i);
-    const quotedRef = backtickMatch ? backtickMatch[1]
-      : dblQuoteMatch ? dblQuoteMatch[1]
-      : sglQuoteMatch ? sglQuoteMatch[1]
-      : null;
-    // 2. Labeled: "Contract file:", "Contract at:", "contract:" followed by path ending .md
-    const labeledMatch = agentPrompt.match(/[Cc]ontract\s*(?:file|at)?[:\s]+([A-Za-z.~\/\\][^\n]*?\.md)\b/i);
-    const labeledRef = labeledMatch && /contracts?[\/\\]/i.test(labeledMatch[1])
-      ? labeledMatch[1].trim() : null;
-    // 3. Unquoted: no-space path (works for simple paths like orchestration/contracts/x.md)
-    const unquotedMatch = agentPrompt.match(/\S*contracts?[\/\\]\S+\.md/i);
-    const unquotedRef = unquotedMatch ? unquotedMatch[0] : null;
-    // Priority: quoted > labeled (handles spaces) > unquoted (simple paths)
-    const rawRef = quotedRef || labeledRef || unquotedRef || null;
-    if (rawRef) {
-      contractFileReferenced = rawRef;
-      // Verify the file exists (absolute path or relative to cwd)
-      const absPath = path.isAbsolute(contractFileReferenced)
-        ? path.resolve(contractFileReferenced)
-        : path.resolve(path.join(cwd, contractFileReferenced));
+    const backtickMatches = [...agentPrompt.matchAll(/`([^`]*contracts?[\/\\][^`]+\.md)`/gi)];
+    const dblQuoteMatches = [...agentPrompt.matchAll(/"([^"]*contracts?[\/\\][^"]+\.md)"/gi)];
+    const sglQuoteMatches = [...agentPrompt.matchAll(/'([^']*contracts?[\/\\][^']+\.md)'/gi)];
+    backtickMatches.forEach(m => candidates.push(m[1]));
+    dblQuoteMatches.forEach(m => candidates.push(m[1]));
+    sglQuoteMatches.forEach(m => candidates.push(m[1]));
+    // 2. Labeled: lines with "contract", "path:", "at:" etc. followed by a path ending .md
+    const labeledMatches = [...agentPrompt.matchAll(/(?:contract|path|available at)[^:]*[:\s]+([A-Za-z.~\/\\][^\n]*?\.md)\b/gi)];
+    labeledMatches.forEach(m => {
+      const ref = m[1].trim();
+      if (/contracts?[\/\\]/i.test(ref)) candidates.push(ref);
+    });
+    // 3. Unquoted: no-space paths (works for simple paths like orchestration/contracts/x.md)
+    const unquotedMatches = [...agentPrompt.matchAll(/\S*contracts?[\/\\]\S+\.md/gi)];
+    unquotedMatches.forEach(m => candidates.push(m[0]));
+    // Try each candidate — if ANY resolves to an existing file, pass
+    for (const ref of candidates) {
+      const absPath = path.isAbsolute(ref)
+        ? path.resolve(ref)
+        : path.resolve(path.join(cwd, ref));
       if (fs.existsSync(absPath)) {
         contractFileValid = true;
+        contractFileReferenced = ref;
+        break;
       }
+      // Track first reference for error messages even if it doesn't resolve
+      if (!contractFileReferenced) contractFileReferenced = ref;
     }
+    // rawRef is the first candidate found (for error messages), or null if none found
+    const rawRef = contractFileReferenced;
 
     // Detect minimum template elements in the embedded prompt content
     const hasQualityDrivers = /quality driver|quality bar|what good looks like|quality criteria|method guidance|what drives.*quality|quality.*:/i.test(agentPrompt);
