@@ -1,7 +1,9 @@
 # Internal distribution tooling — NOT part of the OS, only used by maintainer
-# to manage what gets pushed to this public repo.
 .githooks/
 sync-from-live.sh
+
+# Personal tools and skills — not core OS
+tools/
 
 # Local plan-gate marker (internal bookkeeping, not for distribution)
 .plan-skipped
