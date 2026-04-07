@@ -85,11 +85,24 @@ If Figma MCP is configured, use Figma's "First Draft" to generate screen layouts
 - Install relevant MCP servers (shadcn/ui, Vercel, Railway, GitHub — as applicable)
 - Install dependencies
 
-### 3.2 Spec-driven implementation
+### 3.2 Pre-build verification — understand before you implement
+
+Before writing the first line of code for any feature that involves an external API, a framework or library not yet used in this project, a system integration (MCP servers, hooks, plugins, config files), or a deployment target — **STOP and verify your understanding:**
+
+1. **Read the current official documentation** — not training data. WebFetch or WebSearch the docs. Training data may be stale or wrong for specific integration mechanisms.
+2. **Find a working example** — an actual implementation of what you're about to build. GitHub repos, official tutorials, or community examples.
+3. **Verify the specific mechanism** — e.g., "How exactly does Claude Code load MCP server configs from settings.json?" not "How do MCP servers work in general?" The devil is in the integration detail, not the concept.
+4. **If you can't verify, say so** — "I couldn't find documentation for how X works. My training data suggests Y, but I haven't verified this. Want me to proceed with that assumption or investigate further?"
+
+**The test:** Can you cite a specific documentation page or working example that confirms your implementation approach? [YES — cite it / NO — research now before writing code.]
+
+"I know how to write Python" does not mean "I know how Claude Code registers MCP servers." Familiarity with the language is not familiarity with the integration. This is the single most common cause of build-then-debug-50-times cycles.
+
+### 3.3 Spec-driven implementation
 Build one feature at a time against the PRD. For each feature:
 1. Read the acceptance criteria from the PRD
 2. Implement the feature
-3. **Switch to Tester hat** (see 3.3)
+3. **Switch to Tester hat** (see 3.4)
 4. Commit when the feature works
 
 **Do not build everything at once.** Incremental, one feature at a time. Review each in the browser before moving to the next.
