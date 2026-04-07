@@ -10,7 +10,7 @@ if (count > 0 && count % 25 === 0) {
   const output = {
     hookSpecificOutput: {
       hookEventName: "PostToolUse",
-      additionalContext: "CHECKPOINT (" + count + " tool calls): (1) What are you optimizing for? State it. (2) Is what you're doing aligned with plan.md? (3) Is plan.md current — update it if significant progress since last update. (4) Quality gate: are your recent outputs well-supported and complete? (5) Consider compacting at this logical boundary if context is getting large."
+      additionalContext: "Catch-net checkpoint (" + count + " tool calls — skip items already done): (1) What are you optimizing for? (2) Aligned with plan.md? (3) Is plan.md current? (4) Recent outputs well-supported? (5) Consider compacting if context is large."
     }
   };
   process.stdout.write(JSON.stringify(output));
