@@ -38,7 +38,9 @@ When a task involves steps the user would normally do manually (sign up for a se
 
 **The principle:** Every time you're about to write "please do X manually" or "here are the steps for you to follow," pause and ask whether you could do some or all of those steps yourself. The user's time is the scarcest resource. Manual handoffs should be the exception, not the default.
 
-**Computer use capabilities (when available):**
+**Computer use availability:** Only available in the **Claude Desktop app** (both Cowork and Claude Code modes). **NOT available in the VS Code extension.** Before referencing computer use as an option, check your tool set — if computer use tools aren't listed, you're in VS Code and should use CLI/Bash/Playwright alternatives instead. Don't promise capabilities you don't have.
+
+**Computer use capabilities (when available in Desktop app):**
 - Navigate any website in Chrome (read content, fill forms, click buttons, extract data)
 - Open and interact with desktop applications
 - Visually verify outputs (HTML artifacts, UI elements, layouts)
