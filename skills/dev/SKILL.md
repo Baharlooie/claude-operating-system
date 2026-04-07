@@ -121,7 +121,9 @@ After writing code, explicitly switch mode:
 - [ ] **Verify environment.** Will this work in the TARGET environment (not just the Claude Code shell)? Check: paths, dependencies, permissions, environment variables. [Cite the verification command + output.]
 - [ ] **Check the PRD acceptance criteria.** Does this meet the specific criteria listed? [Cite each criterion + the test that proves it met.]
 
-**Evidence trail — every QA claim needs a reproducible trace.** "I verified it" without a command + output is not verification. Pattern matching (grep, sentence-counts, regex checks) is NOT QA — it's a heuristic that doesn't test behavior. "I read the code carefully" is NOT execution. "I grep'd for a pattern" is NOT testing. For visual artifacts (HTML, UI), grep cannot verify render quality — you must render and inspect (headless browser screenshot, or ship to user for visual confirmation).
+**Evidence trail — every QA claim needs a reproducible trace.** "I verified it" without a command + output is not verification. Pattern matching (grep, sentence-counts, regex checks) is NOT QA — it's a heuristic that doesn't test behavior. "I read the code carefully" is NOT execution. "I grep'd for a pattern" is NOT testing.
+
+**Visual artifacts (HTML, UI) require visual verification.** Grep cannot verify render quality. Use one of these, in order of preference: (1) Playwright/headless browser to render and screenshot, (2) computer use to open the file in Chrome and visually inspect it, (3) ship element-by-element to user for visual confirmation. "I can't render it" is not acceptable when computer use is available — open the file in Chrome and look at it.
 
 **Do not deliver code that hasn't passed the Tester checklist with evidence for each item.**
 
