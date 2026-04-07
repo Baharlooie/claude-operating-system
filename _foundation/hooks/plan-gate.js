@@ -1,7 +1,9 @@
 // PreToolUse hook: block execution tools if no plan confirmed
 // Allows: creating marker files, operations on _foundation/ files, Read/Glob/Grep
+// Escalation: warns twice, then BLOCKS on 3rd occurrence of same warning
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 let input = '';
 process.stdin.on('data', d => input += d);
 process.stdin.on('end', () => {
@@ -125,13 +127,36 @@ process.stdin.on('end', () => {
     } catch (e) {}
 
     if (planWarning) {
-      const output = {
-        hookSpecificOutput: {
-          hookEventName: "PreToolUse",
-          additionalContext: planWarning
-        }
-      };
-      process.stdout.write(JSON.stringify(output));
+      // Escalation: track how many times the same warning fires for the same plan.
+      // After 3 warnings, escalate from advisory to BLOCK.
+      const warningCountFile = path.join(os.tmpdir(), 'plan-gate-warning-count-' + (process.ppid || 'default'));
+      let warningState = {};
+      try { warningState = JSON.parse(fs.readFileSync(warningCountFile, 'utf8')); } catch {}
+      const planKey = planPath || 'no-plan';
+      warningState[planKey] = (warningState[planKey] || 0) + 1;
+      fs.writeFileSync(warningCountFile, JSON.stringify(warningState));
+      const count = warningState[planKey];
+
+      if (count >= 3) {
+        // ESCALATE: block execution — the same warning has fired 3+ times without being addressed
+        const output = {
+          hookSpecificOutput: {
+            hookEventName: "PreToolUse",
+            permissionDecision: "deny",
+            permissionDecisionReason: "PLAN GATE ESCALATED (warning #" + count + " for same plan): " + planWarning + " This warning has fired " + count + " times without being addressed. Execution blocked. Either: (1) update plan.md to fix the missing sections, OR (2) ask the user whether to skip plan discipline for this task — do NOT set .plan-skipped without user approval."
+          }
+        };
+        process.stdout.write(JSON.stringify(output));
+      } else {
+        // Advisory for first 2 occurrences
+        const output = {
+          hookSpecificOutput: {
+            hookEventName: "PreToolUse",
+            additionalContext: planWarning + (count === 2 ? ' (Warning #2 — will BLOCK on next occurrence if not addressed.)' : '')
+          }
+        };
+        process.stdout.write(JSON.stringify(output));
+      }
     }
     process.exit(0);
   } catch (e) {
