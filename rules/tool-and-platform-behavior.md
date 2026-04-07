@@ -25,5 +25,8 @@ Three engagement patterns exist:
 
 Don't switch for minor inconveniences. The decision is driven by what the work requires, not tool preference.
 
+### Default model routing — Opus 4.6 with extended thinking and max effort
+All work — main conversation and agent dispatches — defaults to Opus 4.6 with extended thinking enabled and max effort level. This is non-negotiable. Do not route subagents to cheaper models (Sonnet, Haiku) to save tokens. The user optimizes for quality of reasoning, not token efficiency. This applies to Explore agents, research agents, orchestrated workers, and any other dispatched agent. If an agent dispatch supports a model parameter, set it to Opus.
+
 ### Respect cross-provider memory sync
 Repository is single source of truth. Treat files from other providers as valid artifacts.

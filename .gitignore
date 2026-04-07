@@ -2,8 +2,8 @@
 .githooks/
 sync-from-live.sh
 
-# Personal tools and skills — not core OS
-tools/
+# Personal skills — not core OS (artifact is project-specific)
+skills/artifact/
 
 # Local plan-gate marker (internal bookkeeping, not for distribution)
 .plan-skipped
