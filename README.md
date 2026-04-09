@@ -54,7 +54,9 @@ Out of the box, Claude is optimized for helpfulness and fluency — which works 
 
 **Development workflow.** When the work produces code — from scripts to full-stack applications — invoke `/dev` to activate a guided product lifecycle: discovery, design, build, test, deploy, and maintain. Includes testing discipline (every fix gets a regression test), debugging methodology (no fixes without root cause investigation), and scope control. Designed for non-developers who build with Claude as the primary coder.
 
-**Automatic enforcement via hooks (Claude Code).** 10 hooks run during Claude Code sessions — mechanically enforcing behaviors that text-based rules can't guarantee. Including: enforcing the startup checklist, nudging the quality gate before every response, blocking execution until a plan is confirmed, reminding to assess source authority before searches, agent contract and orchestration quality checks, periodic checkpoint reminders, preserving critical context before compaction, and QA checks on deliverables. These work alongside the behavioral rules, not instead of them.
+**Automatic enforcement via hooks (Claude Code).** 11 hooks run during Claude Code sessions — mechanically enforcing behaviors that text-based rules can't guarantee. Including: enforcing the startup checklist, catch-net quality gate before every response, blocking execution until a plan is confirmed (with escalation — warns twice, blocks on third), reminding to assess source authority before searches, agent contract checks (requires quality drivers + output format, validates contract file exists), periodic checkpoint reminders, preserving critical context before compaction with post-compaction recovery (searches past session reasoning via qmd), and QA checks on deliverables. These work alongside the behavioral rules, not instead of them.
+
+**Session memory and learning loop.** Past session reasoning is searchable — Claude can find WHY a past decision was made, not just WHAT was decided. After substantive sessions, `/session-reflect` extracts learnings across 6 categories (OS rules, skill gaps, tool gaps, process failures, user preferences, cross-project insights). `/session-patterns` and `/content-patterns` find patterns across multiple sessions. The system learns from itself over time.
 
 **Modular rules architecture.** Behavioral rules are split between CLAUDE.md (core governance, loaded every turn) and `.claude/rules/` files (communication quality, tool behavior — loaded automatically but as separate files). This keeps each file under Anthropic's recommended 200-line limit for optimal instruction compliance.
 
@@ -134,6 +136,11 @@ Skills are on-demand workflow methodologies loaded with a slash command. They do
 | **TTS Convert** | `/tts-convert` | Converts Markdown to a TTS-friendly format optimized for listening. |
 | **TTS Play** | `/tts-play` | Reads any Markdown file aloud on desktop using neural voices. |
 | **TTS Save** | `/tts-save` | Converts Markdown to MP3 for mobile listening via cloud sync. |
+| **Session Reflect** | `/session-reflect` | Extract structured learnings from a completed session using a 6-category framework (OS rules, skill gaps, tool gaps, process failures, user preferences, cross-project insights). |
+| **Session Patterns** | `/session-patterns` | Find system and behavioral patterns across multiple sessions — what should change in how you work with the model. |
+| **Content Patterns** | `/content-patterns` | Find topic and substance patterns across sessions — what you're learning about the subject matter itself. |
+| **Browser Automation** | `/browser-automation` | Playwright playbook for authenticated web content, form filling, multi-page extraction, and visual QA screenshots. |
+| **Image Utilities** | `/image-utils` | Download, resize, convert, and optimize images for artifacts and web content. |
 
 ## Tools
 
