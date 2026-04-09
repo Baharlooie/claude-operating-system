@@ -44,10 +44,23 @@ Available tools and skills across the operating system. Claude should be aware o
 
 Installed via `npx skills add pbakaus/impeccable`. All 21 skills auto-detected by Claude Code.
 
-### Project-specific skills (not distributed)
+### Session memory skills (learning loop)
 | Skill | Command | What it does |
 |---|---|---|
-| **Child Artifact Builder** | `/artifact` | Interactive HTML learning artifacts for children. Project-specific — not in distribution. |
+| **Session Reflect** | `/session-reflect` | Extract structured learnings from a completed session using 6-category framework (OS rules, skill gaps, tool gaps, process failures, user preferences, cross-project insights). Writes to `knowledge-base/staging/session-learnings/`. |
+| **Session Patterns** | `/session-patterns` | Find system/behavior patterns across sessions. Two modes: Variation A (Guided Bootstrap — user-directed search across raw 434-session corpus) and Variation B (Codification Digest — from accumulated reflections, needs 10+). |
+| **Content Patterns** | `/content-patterns` | Find topic/substance patterns across sessions. Synthesis memos on what we're learning about subject matter itself (parenting, career, etc.), not how we work. |
+
+**The three skills form a pipeline:**
+- `/session-reflect` → one session → "What did we learn?"
+- `/session-patterns` → system/behavior → "What should change in how we work?"
+- `/content-patterns` → topic/substance → "What are we learning about the subject itself?"
+
+### Personal skills (not distributed)
+| Skill | Command | What it does |
+|---|---|---|
+| **Child Artifact Builder** | `/artifact` | Interactive HTML learning artifacts for children. Project-specific. |
+| **Daily Triage** | Scheduled task | Combines inbox sort + email scan for tasks + calendar scan. Runs at 10am daily or on demand. Located at `~/.claude/scheduled-tasks/daily-triage/`. |
 
 ---
 
@@ -59,6 +72,7 @@ Installed via `npx skills add pbakaus/impeccable`. All 21 skills auto-detected b
 | **Document Skills** | `anthropic-agent-skills` | Official Anthropic skills for creating PDF, DOCX, XLSX, PPTX documents. |
 | **Example Skills** | `anthropic-agent-skills` | Official Anthropic skills: web-artifacts-builder, frontend-design, mcp-builder, webapp-testing, skill-creator, algorithmic-art, and more. |
 | **Ralph Wiggum** | `claude-code-plugins` | Autonomous iteration loop. Claude works → Stop hook intercepts → re-feeds prompt → Claude improves. Repeats until completion criteria met. Use `--max-iterations` as safety cap. |
+| **last30days** | `last30days-skill` | Multi-platform research agent. Searches Reddit, X, YouTube, TikTok, HN, Polymarket, GitHub, Bluesky simultaneously. Ranks by real engagement. Use `/last30days` for topic research. |
 
 **Codex commands:**
 - `/codex:review` — code review
@@ -77,6 +91,7 @@ Installed via `npx skills add pbakaus/impeccable`. All 21 skills auto-detected b
 
 | Server | What it does | Scope |
 |---|---|---|
+| **qmd** | Session memory search — 434 indexed session transcripts. Search past reasoning, decisions, context. Use via Bash fallback: `qmd search "query"`. MCP registered but tools don't load in VS Code (known issue). | User (all projects) |
 | **Context7** | Current, version-specific library/framework docs. Use before building against any API or library. 150M+ pre-indexed docs. | User (all projects) |
 | **Exa** (via mcporter) | Semantic web search across the full internet. Free, no API key. | Project |
 | **Todoist** | Task management — create/read/update/complete tasks, projects, sections, labels. | Project |
@@ -127,6 +142,17 @@ Installed via `npx skills add pbakaus/impeccable`. All 21 skills auto-detected b
 
 **When to suggest:** When the user mentions leaving the computer during a long task, going to sleep, or hitting rate limits.
 
+### Auto-capture — session transcript indexing
+**What:** Python script that converts new JSONL session transcripts to searchable markdown and indexes them in qmd. Scans `~/.claude/projects/` for new/idle sessions, converts via proven parser, runs `qmd update`.
+
+**Location:** `{KNOWLEDGE_BASE}\auto-capture.py`
+
+**Manual run:** `python "{KNOWLEDGE_BASE}/auto-capture.py"`
+
+**Scheduled:** 4x/day via Windows Task Scheduler (being set up). User can also run manually between scheduled runs to push recent sessions.
+
+**When to suggest:** After the user mentions completing a session they want searchable, or before using `/session-reflect` on a recent session.
+
 ### Read Aloud script
 **What:** Converts Markdown to speech using Microsoft's free neural voices. Cross-platform.
 
@@ -165,3 +191,11 @@ Built-in — no MCP setup required. Available on all Claude plans.
 | **Clicky** | AI screen companion — sees screen, talks via voice, explains what's happening. | macOS only (v1). Monitor for Windows release. |
 | **Compound Engineering** | 5-agent pipeline per task (brainstorm→plan→execute→review→cross-check). | Similar to our orchestration. Evaluate for complementarity. |
 | **shanraisshan/claude-code-best-practice** | 32.7K-star best practices catalogue. | Cross-reference session — compare patterns against our OS. |
+| **Claude Managed Agents** | Cloud-hosted agent infrastructure — persistent sessions, multi-agent coordination, self-evaluation loops, checkpointing. | Multi-agent coordination in research preview. Evaluate when GA — potential target for daily triage automation and heavy orchestration that should survive disconnections. [Blog post](https://claude.com/blog/claude-managed-agents). |
+| **Open-Higgsfield-AI** | Free AI studio for image/video generation via cloud APIs (200+ models). Text-to-image, image-to-video, lip sync. | Relevant for wife's business project (SoMe marketing, product photography). Not OS-related. [GitHub](https://github.com/Anil-matcha/Open-Higgsfield-AI). |
+| **VibeVoice (Microsoft)** | Open-source voice AI — 60-min transcription with speaker ID, 90-min multi-speaker TTS, real-time streaming TTS. 37.6K stars. | TTS upgrade path when edge-tts becomes a bottleneck. Meeting transcription for knowledge graph. [GitHub](https://github.com/microsoft/VibeVoice). |
+| **Feynman** | CLI research agent — deep research, literature review, paper audit, experiment replication, simulated peer review. 3.1K stars. | Specialized academic research. Evaluate for research-heavy projects. [GitHub](https://github.com/getcompanion-ai/feynman). |
+| **Clicky** | AI screen companion — sees screen, talks via voice, explains what's happening in real-time. | macOS only (v1). Monitor for Windows release. Learning companion for unfamiliar technical territory. [GitHub](https://github.com/farzaa/clicky). |
+| **Modes of reasoning pattern** | 80 reasoning modes across 12 categories. Dispatch agents with assigned reasoning perspectives for multi-viewpoint analysis. | Implement as orchestration pattern — contracts specify reasoning mode (dialectical, theory-of-mind, adversarial, etc.). [Reference](https://github.com/Dicklesworthstone/ntm/blob/main/modes_of_reasoning.md). |
+| **Mem0 / Letta** | Dedicated AI memory layers — auto-extract facts/reasoning from sessions, persist across context windows. | Evaluate for knowledge graph project — addresses reasoning persistence gap. [Mem0 paper](https://arxiv.org/pdf/2504.19413). |
+| **Rowboat** | Local-first AI coworker — builds Obsidian-compatible knowledge graph from email + meetings. MCP-compatible. 10.1K stars. | Evaluate for knowledge graph project. Handover note written. [GitHub](https://github.com/rowboatlabs/rowboat). |

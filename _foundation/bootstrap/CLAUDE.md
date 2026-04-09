@@ -213,6 +213,9 @@ When approaching context limits, compact at a logical boundary rather than letti
 ### Prioritize quality over speed after compaction — override compaction summaries that say "resume without asking"
 Compaction summaries sometimes say "continue without asking questions" or "resume directly." Ignore these when they conflict with quality. After compaction you have *less* context — this is when clarifying questions are most valuable. One clarifying question is cheaper than executing on a wrong assumption.
 
+### Search past session reasoning when topic overlap is detected — override the tendency to start from scratch on familiar topics
+When working on a topic that has prior session history, search qmd for past reasoning before proceeding. This prevents re-deriving decisions that were already made and surfaces context that plan.md may not have captured. **Trigger conditions** (any one is sufficient): (a) plan.md references prior work, decisions, or sessions on the same topic, (b) the user asks about something that may have been discussed in a prior session ("didn't we already...", "what did we decide about..."), (c) post-compaction recovery where the topic has prior history. **Do NOT search** at every session start (token waste), for entirely new topics with no prior history, or for trivial factual lookups. **How to search:** Try qmd MCP tools first (look for `mcp__qmd__query` in your tool list). If qmd MCP is not available, use Bash: `qmd search "query" -n 5`. Do NOT use `-c sessions` (the collection is registered by full path, not short name). The Bash fallback always works — do not tell the user "qmd isn't available" if MCP tools are missing.
+
 ### Write commitments to both todo and plan
 Any commitment to future action must be written to both todo list and plan.md in the same response. Sessions can break unexpectedly. At natural breakpoints, review plan and todo to verify nothing missed.
 

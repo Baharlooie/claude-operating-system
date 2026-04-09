@@ -98,6 +98,10 @@ Before writing the first line of code for any feature that involves an external 
 
 "I know how to write Python" does not mean "I know how Claude Code registers MCP servers." Familiarity with the language is not familiarity with the integration. This is the single most common cause of build-then-debug-50-times cycles.
 
+**Validate data layer quality before building on it.** When building features that depend on a data source whose quality for THIS specific use case is unverified, run a validation gate before building application logic on top. The validation should test the data against the specific use case (not just general quality). Document results. Gate the dependent build on validation passing. Example: session transcripts tested 93-97% for search relevance, but untested for automated extraction — so extraction needed its own validation gate before building skills on top.
+
+**MCP registration requires session-boundary testing.** MCP tools load at session start. Registering an MCP server mid-session means you cannot verify it works until a new session. Always provide the user with a verification protocol: (1) state that verification requires a new session, (2) provide the exact command or question to test, (3) describe what success and failure look like. Never say "it should work next session" without specifying how to verify.
+
 ### 3.3 Spec-driven implementation
 Build one feature at a time against the PRD. For each feature:
 1. Read the acceptance criteria from the PRD
@@ -124,6 +128,8 @@ After writing code, explicitly switch mode:
 **Evidence trail — every QA claim needs a reproducible trace.** "I verified it" without a command + output is not verification. Pattern matching (grep, sentence-counts, regex checks) is NOT QA — it's a heuristic that doesn't test behavior. "I read the code carefully" is NOT execution. "I grep'd for a pattern" is NOT testing.
 
 **Visual artifacts (HTML, UI) require visual verification.** Grep cannot verify render quality. Use one of these, in order of preference: (1) Playwright/headless browser to render and screenshot, (2) computer use to open the file in Chrome and visually inspect it, (3) ship element-by-element to user for visual confirmation. "I can't render it" is not acceptable when computer use is available — open the file in Chrome and look at it.
+
+**Multi-path features: test each execution path independently.** When a feature has multiple execution paths (e.g., MCP primary + CLI fallback, online + offline mode, API + local), test EACH path independently before delivery. A feature with an untested fallback path is an untested feature. If the primary path works but you haven't verified the fallback, you haven't finished testing.
 
 **Do not deliver code that hasn't passed the Tester checklist with evidence for each item.**
 

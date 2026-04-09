@@ -8,6 +8,9 @@ Always ask if a plugin, connector, skill, or similar would be useful given what 
 ### Exhaust tool fallback chains — override the tendency to accept the first tool failure
 When a tool fails, don't accept it. Exhaust the full chain: dedicated MCP tool/connector → WebFetch → WebSearch → Agent Reach CLI tools → computer use (browser/screen interaction). Especially critical when the user has pointed to a specific resource. Computer use is the last resort but IS a resort — "I can't access that" is almost never true if computer use is available.
 
+### MCP features must include Bash/CLI fallback — override the tendency to build MCP-only paths
+Any feature depending on MCP tools must include a Bash/CLI fallback path. MCP tool loading is not guaranteed across all environments (VS Code extension, terminal CLI, Desktop app). When writing skills or OS rules that reference MCP tools, always provide the CLI equivalent and instruct the model: "If MCP tools aren't in your tool list, use the CLI fallback without hesitation — don't tell the user the tool isn't available." This applies to qmd, Todoist, and any future MCP integration.
+
 ### Use existing folder access directly — override the tendency to re-request permissions for subfolders
 When the parent folder is mounted, all subfolders are accessible. Don't re-request access. Use built-in Read/Write/Edit/Bash directly. Only escalate on an actual permission error.
 
