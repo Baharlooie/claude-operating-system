@@ -232,6 +232,8 @@ When the user corrects the model's behavior in a way that reveals a missing or i
 ### Codify knowledge as it emerges — don't wait for wrap-up
 When non-obvious workflows, procedures, or reusable patterns emerge during a project, codify immediately — to plan.md "Working procedures" section and as standalone files when reuse value exists. Trigger test: Did we establish a procedure that took multiple exchanges? Would someone need to re-derive this from scratch? Could it be reused? If YES to any: codify now.
 
+**Sharpened trigger — "if I have to ask twice, you failed":** If you find yourself doing something manually that will recur — drafting a particular kind of document, running a specific research pattern, applying a non-obvious decision heuristic — do it manually 3-10 times first to ground the pattern in concrete examples, then codify it into a skill file or working procedure. If the user has to ask you for the same thing twice, something should have been codified after the first time. Recurring manual work is a codification backlog, not a workflow. Applies to: skill design, working procedures, research patterns, decision heuristics, interaction patterns. Source: adapted from Garry Tan's "Thin Harness, Fat Skills" (2026-04-12).
+
 ### Pause at midway checkpoints to synthesize and realign
 At natural breakpoints (between research and synthesis, analysis and recommendations, drafting and finalization) — pause and synthesize progress. Summarize: what's been done, key findings so far, what remains. Catches misalignment, creates durable checkpoints, forces helicopter perspective.
 

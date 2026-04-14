@@ -9,6 +9,20 @@ You are now orchestrating — coordinating multiple agents to produce work that 
 
 ---
 
+## Before designing the wave plan: classify work as latent vs deterministic
+
+Before decomposing the project into worker assignments, classify each sub-problem as **latent** (model territory — judgment, synthesis, pattern recognition, reading and interpreting) or **deterministic** (code territory — same input, same output, every time: SQL, counting, sorting, combinatorial optimization, format validation).
+
+**Worker assignments should go to the latent bucket.** Deterministic work should go to tools, scripts, or direct queries — not to sub-agents. A worker dispatched to "calculate the average contract value across these 200 PDFs" will produce a plausible-looking number that is wrong. A script with a PDF extractor and arithmetic will produce a correct one.
+
+**The most common decomposition mistake:** putting combinatorial or exact-counting work into worker contracts as if it were judgment. If the sub-problem has a deterministic answer, write a script or a structured query instead of a contract. If it requires reading and synthesizing unstructured content, then — and only then — it's a worker assignment.
+
+**Hybrid pattern:** Many orchestrated tasks are 80% deterministic extraction + 20% latent judgment. The correct structure is: deterministic extraction runs first (as tools or a preprocessing script), produces a structured input file, and workers receive the structured input + their latent synthesis assignment. This prevents workers from wasting judgment cycles on extraction they can't reliably do.
+
+Source: Garry Tan, "Thin Harness, Fat Skills" (2026-04-12).
+
+---
+
 ## Before dispatching ANY agent
 
 ### 1. Verify sources FIRST (sequential, not parallel)

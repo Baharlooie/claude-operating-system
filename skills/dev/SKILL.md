@@ -78,6 +78,63 @@ If Figma MCP is configured, use Figma's "First Draft" to generate screen layouts
 
 **Goal:** Turn the spec and design into a working product, with quality discipline throughout.
 
+### Building principles — read before starting Phase 3
+
+Three principles govern how code gets written and edited during this phase. They apply to every feature, every fix, every refactor.
+
+**1. Surgical changes — touch only what you must.**
+
+When editing existing code:
+- Every changed line should trace directly to the user's request. If a line is changed, you should be able to name which request line drove that change.
+- Don't "improve" adjacent code, comments, or formatting that isn't broken.
+- Don't refactor things that work just because you'd write them differently. Match existing style, even if you wouldn't write it that way yourself.
+- If you notice unrelated dead code or a latent bug outside scope, *mention it* — don't delete or fix it silently. Let the user decide if it's worth a separate pass.
+- When your changes create orphans (unused imports, variables, functions that YOUR edits made dead), clean them up. When pre-existing dead code exists, leave it alone unless asked.
+
+**The test:** Read the diff. Could you justify every changed line by pointing at a specific user request? If not, you're drifting.
+
+**2. Transform imperative to verifiable goal — before you implement.**
+
+Before writing code for a task, rewrite the task as a verifiable goal with a concrete check:
+
+| Imperative (weak) | Verifiable goal (strong) |
+|---|---|
+| "Add validation" | "Write tests for invalid inputs, then make them pass" |
+| "Fix the bug" | "Write a test that reproduces the bug, then make it pass" |
+| "Refactor X" | "Ensure existing tests pass before and after the refactor" |
+| "Make it faster" | "Benchmark current performance, set a target, verify the target is met" |
+| "Add logging" | "Write a test that asserts a specific log line appears for a specific input" |
+
+Strong success criteria let you (and the model) loop autonomously until done. Weak criteria ("make it work") require constant user clarification and produce drift.
+
+**For multi-step tasks, state a brief plan with verification per step:**
+
+```
+1. [Step] → verify: [check]
+2. [Step] → verify: [check]
+3. [Step] → verify: [check]
+```
+
+This is not ceremony — it's the mechanism that lets "done" mean something.
+
+**3. Latent vs deterministic — classify every step before writing the code.**
+
+Every step in your implementation is one of two things:
+
+- **Latent** (model territory) — judgment, synthesis, pattern recognition, reading and interpreting unstructured inputs, deciding what matters. This is where the LLM adds value that code cannot.
+- **Deterministic** (code territory) — same input, same output, every time. SQL queries, compiled code, arithmetic, counting, sorting, combinatorial optimization, exact string matching, format validation, schema checks.
+
+**Confusing the two is the most common agent design mistake.** A model can seat 8 people at a dinner table with social judgment about personalities and dynamics. A model *cannot* reliably seat 800 people — that's combinatorial optimization, and the model will produce a plausible-looking seating chart that is wrong in ways you can't easily detect.
+
+**Classification rule:** Before writing code for a step, ask:
+- Is this step's correctness checkable with a deterministic test (same input → same output)? If yes, it's deterministic. Write it as code, not as a model call.
+- Does this step require reading unstructured content and making a judgment call that would differ based on context? If yes, it's latent. Put it in a model call or skill.
+- Is this step combinatorial (optimization across N×M possibilities)? Always deterministic, even if it feels like judgment. Models hallucinate plausible combinatorial outputs.
+
+**Design pattern:** Push judgment up into skills/models. Push execution down into deterministic tooling. Let the two communicate through clearly structured inputs and outputs. The worst systems blur these together; the best systems are ruthless about keeping them separate.
+
+Source for principles 1-2: [forrestchang/andrej-karpathy-skills](https://github.com/forrestchang/andrej-karpathy-skills) (Karpathy observations on LLM coding pitfalls). Source for principle 3: Garry Tan, "Thin Harness, Fat Skills" (2026-04-12).
+
 ### 3.1 Project setup
 - Create project folder with plan.md
 - Initialize git (`git init`)

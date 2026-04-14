@@ -36,21 +36,51 @@ process.stdin.on('end', () => {
     let contractFileReferenced = null;
     const candidates = [];
     // 1. Quoted paths: backtick, double-quote, single-quote wrapping a contracts path
+    //    Quotes delimit the match so spaces inside work correctly.
     const backtickMatches = [...agentPrompt.matchAll(/`([^`]*contracts?[\/\\][^`]+\.md)`/gi)];
     const dblQuoteMatches = [...agentPrompt.matchAll(/"([^"]*contracts?[\/\\][^"]+\.md)"/gi)];
     const sglQuoteMatches = [...agentPrompt.matchAll(/'([^']*contracts?[\/\\][^']+\.md)'/gi)];
     backtickMatches.forEach(m => candidates.push(m[1]));
     dblQuoteMatches.forEach(m => candidates.push(m[1]));
     sglQuoteMatches.forEach(m => candidates.push(m[1]));
-    // 2. Labeled: lines with "contract", "path:", "at:" etc. followed by a path ending .md
-    const labeledMatches = [...agentPrompt.matchAll(/(?:contract|path|available at)[^:]*[:\s]+([A-Za-z.~\/\\][^\n]*?\.md)\b/gi)];
-    labeledMatches.forEach(m => {
-      const ref = m[1].trim();
-      if (/contracts?[\/\\]/i.test(ref)) candidates.push(ref);
-    });
-    // 3. Unquoted: no-space paths (works for simple paths like orchestration/contracts/x.md)
-    const unquotedMatches = [...agentPrompt.matchAll(/\S*contracts?[\/\\]\S+\.md/gi)];
-    unquotedMatches.forEach(m => candidates.push(m[0]));
+    // 2. Anchor-based extraction: find every "contracts[/\]X.md" occurrence in the prompt,
+    //    then walk backwards to the rightmost absolute-path anchor (Windows drive letter,
+    //    Git-Bash /x/, or home ~/) so we capture the full path even when it contains spaces.
+    //    Fallback: last whitespace boundary (preserves original behavior for simple relative
+    //    paths like "orchestration/contracts/foo.md" without spaces).
+    //
+    //    This replaces two earlier buggy strategies:
+    //    - "labeled" regex used [^:]* which consumed through the drive letter colon and
+    //      caused "C:\..." paths to lose their drive letter prefix
+    //    - "unquoted" regex used \S* which treated spaces as terminators and captured only
+    //      the trailing fragment after the last space before "contracts\" (e.g. "AI assisted"
+    //      and "children friendly" would break the match)
+    //    Fixed 2026-04-13 after a real failure in a dispatch with spaces in the path.
+    const contractMdRegex = /contracts?[\/\\][^\s`"'\n]+?\.md\b/gi;
+    let mdMatch;
+    while ((mdMatch = contractMdRegex.exec(agentPrompt)) !== null) {
+      const mdStart = mdMatch.index;
+      const mdEnd = mdMatch.index + mdMatch[0].length;
+      const beforeMd = agentPrompt.substring(0, mdStart);
+
+      // Find rightmost absolute-path anchor before this match
+      const anchorRegex = /(?:[A-Za-z]:[\\\/]|\/[a-z]\/|~[\\\/])/g;
+      let lastAnchorPos = -1;
+      let anchorMatch;
+      while ((anchorMatch = anchorRegex.exec(beforeMd)) !== null) {
+        lastAnchorPos = anchorMatch.index;
+      }
+
+      let startPos;
+      if (lastAnchorPos !== -1) {
+        startPos = lastAnchorPos;
+      } else {
+        // No absolute anchor — fall back to last whitespace boundary
+        const wsMatch = beforeMd.match(/(\S*)$/);
+        startPos = wsMatch ? wsMatch.index : mdStart;
+      }
+      candidates.push(agentPrompt.substring(startPos, mdEnd));
+    }
     // Try each candidate — if ANY resolves to an existing file, pass
     for (const ref of candidates) {
       const absPath = path.isAbsolute(ref)
