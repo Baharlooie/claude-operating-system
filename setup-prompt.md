@@ -286,6 +286,7 @@ After verification, summarize:
 - Use the **latest flagship Opus model** (Opus 4.7 as of April 2026, or whatever is current — the operating system auto-adopts the best available) with **extended thinking / maximum effort** for best results
 - For long or complex projects, use **Claude Code** (1M token context window)
 - For shorter projects, **Cowork** works well and has a more visual interface
+- **Apply the security baseline.** Read `_foundation/security-baseline.md` and add the recommended `permissions.deny` block to your `~/.claude/settings.json`. Claude Code has full access to your home directory by default (SSH keys, AWS credentials, `.env` files) — the baseline blocks credential reads and data-exfiltration commands in ~15 minutes. Mandatory if you ever clone untrusted repos; recommended for everyone.
 
 **Tips for getting the most out of it:**
 - In long sessions (20+ exchanges), say 'check the plan — are we still aligned?'
