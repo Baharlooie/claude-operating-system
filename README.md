@@ -12,7 +12,7 @@ Think of them as "meta instructions" contained in a set of files that sit on you
 
 ## Why is it relevant?
 
-Claude Opus 4.6 is a powerful model — fast, articulate and confident. But at least currently, it benefits from a bit of "scaffolding / harnessing", if you're working on things where being correct matters more than being quick.
+Claude's flagship models (Opus family — currently Opus 4.7, previously 4.6) are powerful — fast, articulate and confident. But at least currently, they benefit from a bit of "scaffolding / harnessing", if you're working on things where being correct matters more than being quick.
 
 This is because LLMs have predictable behavioral patterns that undermine quality work. They're not bugs — they're just how the models are built and a part of their "probabilistic nature". E.g. 
 
@@ -22,7 +22,7 @@ This is because LLMs have predictable behavioral patterns that undermine quality
 
 And while they are not entirely avoidable, they are partly controllable with the right "operating system". The approach is grounded in what Anthropic calls **context engineering** (see [Anthropic's guide to effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)) — the principle that the infrastructure around the model matters as much as the model itself.
 
-The system has been tested against Claude Opus 4.6 out of the box using 49 automated behavioral tests across 20 categories and has produced better results than the out-of-the-box model (although not dramatically better — Opus 4.6 out of the box is decent). The real value is that you as a user get attuned to how to prevent the classic "Claude biases and failure modes".
+The system was originally tested against Claude Opus 4.6 out of the box using 49 automated behavioral tests across 20 categories and has produced better results than the out-of-the-box model (although not dramatically better — the Opus tier out of the box is decent). The operating system is deliberately model-agnostic — it auto-adopts whatever the latest flagship Opus is (now 4.7 as of April 2026). The real value is that you as a user get attuned to how to prevent the classic "Claude biases and failure modes".
 
 ### Who is this for?
 
@@ -62,7 +62,7 @@ Out of the box, Claude is optimized for helpfulness and fluency — which works 
 
 ## The system comes with tradeoffs
 
-It makes the process of going from prompt to answer slower and burns a few more tokens, because of more up-front problem structuring (are we solving the right thing and in the right way), more verification, more assumption checks etc. A task that Opus 4.6 out of the box handles in one exchange might take several. BUT the tradeoff is deliberate: **quality over speed.** When you don't want that tradeoff, just tell Claude to skip the operating system entirely for that task.
+It makes the process of going from prompt to answer slower and burns a few more tokens, because of more up-front problem structuring (are we solving the right thing and in the right way), more verification, more assumption checks etc. A task that the out-of-the-box flagship model handles in one exchange might take several. BUT the tradeoff is deliberate: **quality over speed.** When you don't want that tradeoff, just tell Claude to skip the operating system entirely for that task.
 
 ---
 

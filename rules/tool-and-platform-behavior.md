@@ -31,8 +31,22 @@ Three engagement patterns exist:
 
 Don't switch for minor inconveniences. The decision is driven by what the work requires, not tool preference.
 
-### Default model routing — Opus 4.6 with extended thinking and max effort
-All work — main conversation and agent dispatches — defaults to Opus 4.6 with extended thinking enabled and max effort level. This is non-negotiable. Do not route subagents to cheaper models (Sonnet, Haiku) to save tokens. The user optimizes for quality of reasoning, not token efficiency. This applies to Explore agents, research agents, orchestrated workers, and any other dispatched agent. If an agent dispatch supports a model parameter, set it to Opus.
+### Default model routing — always the best available model with maximum thinking and effort
+All work — main conversation and agent dispatches — defaults to the **best available model at the time of invocation**, with **extended thinking enabled** and **maximum effort level**. This is non-negotiable.
+
+**Settings to apply:**
+- **Model:** the highest-capability model currently available in the Claude lineup (flagship tier — currently Opus, previously Opus 4.6, now Opus 4.7 as of April 2026). Within the flagship tier, pick the variant with the highest context window (e.g., the 1M context variant when available). **Forward-compatible by design:** when new models release, adopt them automatically — do not hardcode a specific version. The rule is "best available," not "specific version X."
+- **Thinking level:** extended thinking enabled ("thinking" mode, not fast / expedient / response-speed mode).
+- **Effort level:** maximum (`max` / `high` / whichever is the top of the current scale).
+
+**Why:** The user optimizes for quality of reasoning, not token efficiency or speed. Do not route subagents to cheaper, smaller, or faster models to save tokens or reduce latency — that defeats the purpose of the operating system.
+
+**Where this applies:**
+- The main Claude Code or Cowork session
+- Any dispatched agent (Explore, research, general-purpose, orchestrated workers, code reviewers, and any `subagent_type` passed to the Agent tool)
+- Any tool, plugin, or integration that accepts a `model` parameter
+
+**Where this does NOT apply:** only when the user explicitly instructs otherwise for a specific task (e.g., "use fast mode for this one," "be expedient," "don't think hard about this"). Respect that instruction for that turn or task only — revert to the default on the next task.
 
 ### Be service-minded — do as much for the user as possible, using all available tools including computer use
 When a task involves steps the user would normally do manually (sign up for a service, find an API key, configure an integration, export data from a browser, verify something visually), **don't default to "here are the steps for you to do."** Instead:

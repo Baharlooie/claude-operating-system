@@ -283,7 +283,7 @@ After verification, summarize:
 - **Context survives long sessions** — compaction checkpoints and periodic check-ins keep Claude aligned with your plan even in very long conversations
 
 **Recommended settings:**
-- Use **Opus 4.6** (latest model) with **extended thinking / maximum effort** for best results
+- Use the **latest flagship Opus model** (Opus 4.7 as of April 2026, or whatever is current — the operating system auto-adopts the best available) with **extended thinking / maximum effort** for best results
 - For long or complex projects, use **Claude Code** (1M token context window)
 - For shorter projects, **Cowork** works well and has a more visual interface
 
