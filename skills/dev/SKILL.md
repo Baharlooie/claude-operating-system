@@ -223,6 +223,19 @@ When something breaks:
 - Conventional commit messages: `feat:`, `fix:`, `refactor:`, `test:`, `docs:`
 - Each commit should be independently functional — if you revert to any commit, the app should work
 
+### 3.8 Optional — git worktrees for parallel features
+
+When working on 2+ features simultaneously on the same repo (rare for single-developer work, but happens), git worktrees let each feature live in its own directory while sharing the underlying repo. No more "stash WIP, checkout other branch, pop stash" churn.
+
+**When it's worth the setup:** you're actively iterating on feature A, a blocker appears that needs feature B to unblock, AND switching branches means losing dev-server state or mid-edit context on A. Without worktrees, you either commit WIP prematurely or accept lost state. With worktrees, A keeps running on port X while you develop B in a fresh directory.
+
+**Commands:**
+- Create: `git worktree add ../<repo>-<feature-b> <branch>` (creates sibling directory sharing the `.git`)
+- List: `git worktree list`
+- Remove when done: `git worktree remove ../<repo>-<feature-b>`
+
+**When NOT to use:** single-feature work (overhead not justified), exploring throwaway branches (just use `git stash`), any scenario where you're not holding mid-edit context across switches. Don't reach for worktrees as a default — reach for them when branch-switching is actively costing you work. Source: harvested from obra/superpowers' `using-git-worktrees` skill (2026-04-20 plugin research; plugin itself SKIPPED due to OS collision, this specific pattern harvested).
+
 ---
 
 ## Phase 4: Test & Deploy

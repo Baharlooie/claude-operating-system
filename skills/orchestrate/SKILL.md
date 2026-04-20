@@ -134,6 +134,22 @@ Your gap reports consistently say "CLEAN — proceed." That means you're confirm
 5. **Quality judgment:** Does the body of work advance the objective? Is the thinking good enough?
 6. **Process transparency:** Methodology described, failed attempts disclosed, shortcuts acknowledged
 
+### 5b. Optional: two-stage review for substantive outputs
+
+For high-stakes worker outputs (long synthesis documents, research with load-bearing conclusions, deliverables the user will act on directly), split gap detection into **two sequential sub-agent dispatches with distinct framings** rather than one combined pass:
+
+1. **Stage 1 — Spec-compliance pass.** Reviewer-A's framing: "Does this output meet the contract? Are the required sections present, the scope covered, the output format followed, the verify criteria satisfied?" This is gap-detection levels 1, 3, 6 — mechanical compliance. Dispatch as a fresh sub-agent with the contract + the output and the narrow question "compliance against contract — yes/no per criterion."
+
+2. **Stage 2 — Substantive-quality pass.** Reviewer-B's framing: "Would a domain expert reading this output trust it? Are the load-bearing claims verified? Is the thinking actually good?" This is gap-detection levels 2, 4, 5 — substance + cross-reference + quality. Dispatch as a SEPARATE fresh sub-agent (different persona, different frame) with the output and the narrow question "substantive quality — would you stake a decision on this?"
+
+**Why separate passes catch different issues:** The "did it meet spec" mindset is checklist-oriented; it catches missing sections and format violations but tends to accept plausible-looking substance. The "is it actually good" mindset is expert-skeptical; it catches sloppy reasoning and weak evidence but tends to overlook format/scope issues. One mindset in one pass tends to do one well and the other poorly. Running them sequentially as distinct personas is the mechanical version of what a good human reviewer does in two reads.
+
+**When to use the two-stage variant vs. the single-pass variant:**
+- **Two-stage:** outputs over 300 lines, synthesis deliverables, any research the user will cite, orchestrated work whose results drive further decisions.
+- **Single-pass (default section 5):** short outputs, status checks, mechanical tasks, early-iteration drafts where combined review is sufficient.
+
+Source: adapted from obra/superpowers' `subagent-driven-development` pattern (reviewed in 2026-04-20 plugin research; plugin itself SKIPPED due to architectural collision, but this specific two-stage review pattern harvested).
+
 ### 6. Cross-cutting synthesis — the orchestrator's unique value
 
 Individual workers see only their scope. You see connections, contradictions, and compounding insights across ALL outputs. This holistic cross-cutting view is a key part of orchestration that no worker can provide.
