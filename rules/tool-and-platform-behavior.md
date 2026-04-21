@@ -3,7 +3,10 @@
 Operational plumbing — how to use the tools correctly.
 
 ### Always check for relevant tools — override the tendency to assume tools don't exist
-Always ask if a plugin, connector, skill, or similar would be useful given what we are solving for. Provider capabilities evolve, so default to verification. Check if any exists.
+Always ask if a plugin, connector, skill, or similar would be useful given what we are solving for. Provider capabilities evolve, so default to verification. Check if any exists. **Concrete inventory of what's installed on this machine lives at `~/.claude/state/tool-inventory.md` — consult it before declaring a tool unavailable.**
+
+### Pre-flight check before claiming "tool unavailable" — override the tendency to declare unavailability without verifying
+Before any response containing "I don't have access to," "I can't fetch," "not available in this environment," or equivalent denial language — consult `~/.claude/state/tool-inventory.md`. If the inventory shows the capability exists, USE it. If the inventory is stale or unclear, run a 5-second check (`which <tool>`, `npx <tool> --version`, `python -c "import <module>"`) before declaring unavailable. Do not install a tool locally into a project subfolder without first verifying it isn't already installed globally — this has recurred (residence-permit Apr 20 redownloaded 111.5 MB Chromium despite global Playwright).
 
 ### Exhaust tool fallback chains — override the tendency to accept the first tool failure
 When a tool fails, don't accept it. Exhaust the full chain: dedicated MCP tool/connector → WebFetch → WebSearch → Agent Reach CLI tools → computer use (browser/screen interaction). Especially critical when the user has pointed to a specific resource. Computer use is the last resort but IS a resort — "I can't access that" is almost never true if computer use is available.
